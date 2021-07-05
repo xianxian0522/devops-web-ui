@@ -39,9 +39,9 @@
 import { defineComponent, toRefs, reactive, ref, onMounted } from "vue";
 import { UserOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { BarItem } from "@/utils/response";
-import router from "@/router";
 import jwtDecode from "jwt-decode";
 import devopsRepository from "@/api/devopsRepository";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "CommonHeader",
@@ -49,6 +49,7 @@ export default defineComponent({
     UserOutlined, DownOutlined,
   },
   setup() {
+    const router = useRouter()
     const state = reactive({
       selectedKey: ['/biz/index'],
       username: '用户名',

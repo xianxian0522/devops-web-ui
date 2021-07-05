@@ -28,7 +28,7 @@
               <a-menu-item :key="item.path">
                 <span>
 <!--                  <icon-font :type="item.icon" />-->
-                  <router-link :to="'/biz/' + item.path">{{ item.name }}</router-link>
+                  <router-link :to="{path: '/biz/' + item.path, query: { bizId: bizId }}">{{ item.name }}</router-link>
                 </span>
               </a-menu-item>
             </template>
@@ -41,7 +41,7 @@
                 <a-menu-item v-for="t in item.children" :key="t.path">
                   <span>
 <!--                  <icon-font :type="t.icon" />-->
-                  <router-link :to="'/biz/' + t.path">{{ t.name }}</router-link>
+                  <router-link :to="{path: '/biz/' + t.path,  query: { bizId: bizId }}" >{{ t.name }}</router-link>
                   </span>
                 </a-menu-item>
               </a-sub-menu>
@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import CommonHeader from "@/components/CommonHeader.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import bizRepositories from "@/composable/bizRepositories";
 import { reactive, ref, toRefs } from "vue";
 import { BarItem } from "@/utils/response";
@@ -70,7 +70,6 @@ export default {
   },
   setup() {
     const route = useRoute()
-    const router = useRouter()
     const url = route.path.split('/')
 
     const { bizId, bizList } = bizRepositories()

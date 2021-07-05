@@ -18,4 +18,5 @@ export default {
   login: () => request.get<LoginResponse>(ApiLogin),
 
   queryAllBiz: () => request.get<BizResponse[]>(`${ApiBiz}`),
+  queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),
 }
