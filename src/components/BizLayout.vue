@@ -1,13 +1,156 @@
 <template>
-<div></div>
+  <a-layout class="layout">
+    <a-layout-header class="header">
+      <CommonHeader />
+    </a-layout-header>
+    <a-layout>
+      <a-layout-sider width="200" style="background: #fff">
+        <div class="select-menu-contain">
+          <a-select
+            v-model:value="bizId"
+            show-search
+            placeholder="Select a biz"
+            :filter-option="filterOptionBiz"
+            style="width: 100%"
+          >
+            <a-select-option v-for="option in bizList" :key="option.ID" :value="option.ID" :title="option.Name">{{ option.Name }}</a-select-option>
+          </a-select>
+        </div>
+        <a-menu
+          class="menu-side"
+          mode="inline"
+          v-model:openKeys="openKeys"
+          v-model:selectedKeys="selectedKeysMenu"
+          :style="{ height: '100%', borderRight: 0 }"
+        >
+          <template v-for="item in bar" :key="item.path">
+            <template v-if="!item.children">
+              <a-menu-item :key="item.path">
+                <span>
+<!--                  <icon-font :type="item.icon" />-->
+                  <router-link :to="'/biz/' + item.path">{{ item.name }}</router-link>
+                </span>
+              </a-menu-item>
+            </template>
+            <template v-else>
+              <a-sub-menu :key="item.path">
+                <template #title>
+<!--                  <icon-font :type="item.icon" />-->
+                  <span>{{ item.name }}</span>
+                </template>
+                <a-menu-item v-for="t in item.children" :key="t.path">
+                  <span>
+<!--                  <icon-font :type="t.icon" />-->
+                  <router-link :to="'/biz/' + t.path">{{ t.name }}</router-link>
+                  </span>
+                </a-menu-item>
+              </a-sub-menu>
+            </template>
+          </template>
+        </a-menu>
+      </a-layout-sider>
+      <a-layout-content class="common-content">
+        <router-view></router-view>
+      </a-layout-content>
+    </a-layout>
+  </a-layout>
 </template>
 
 <script lang="ts">
+import CommonHeader from "@/components/CommonHeader.vue";
+import { useRoute, useRouter } from "vue-router";
+import bizRepositories from "@/composable/bizRepositories";
+import { reactive, ref, toRefs } from "vue";
+import { BarItem } from "@/utils/response";
+
 export default {
-  name: "BizLayout"
+  name: "BizLayout",
+  components: {
+    CommonHeader,
+  },
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
+    const url = route.path.split('/')
+
+    const { bizId, bizList } = bizRepositories()
+
+    const state = reactive({
+      openKeys: ['setup'],
+      selectedKeysMenu: [url[2]],
+    })
+    const bar = ref<BarItem[]>([
+      {id: 1, icon: '', path: 'index', name: '业务总览'},
+      {id: 2, icon: '', path: 'members', name: '业务成员'},
+      {id: 3, icon: '', path: 'setup', name: '设置',
+        children: [
+          {id: 4, icon: '', path: 'set-information', name: '基本信息'},
+          {id: 5, icon: '', path: 'app-settings', name: '应用设置'},
+        ],
+      },
+      {id: 6, icon: '', path: 'host-details', name: '机器详情'},
+    ])
+
+    const filterOptionBiz = (input: string, option: any) => {
+      console.log(input, option)
+      return option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    }
+
+    return {
+      bar,
+      ...toRefs(state),
+      bizId,
+      bizList,
+      filterOptionBiz,
+    }
+  }
 };
 </script>
 
 <style scoped lang="less">
-
+@baseBorder: #DCDEE5;
+.layout {
+  width: 100vw;
+  height: inherit;
+}
+// 侧边栏滚动
+.ant-layout-sider {
+  overflow: auto;
+}
+.common-content {
+  background: #fff;
+  border-left: 1px solid #DCDEE5;
+  padding: 20px;
+}
+.layout /deep/ .ant-layout-header {
+  height: 58px;
+  display: flex;
+  padding: 0 40px;
+}
+.menu-side {
+  text-align: left;
+  a::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+    content: '';
+  }
+  a {
+    color: rgba(0, 0, 0, 0.85);
+  }
+  .ant-menu-item-selected a, a:hover {
+    color: #1890ff;
+  }
+}
+.select-menu-contain {
+  display: flex;
+  justify-content: center;
+  height: 53px;
+  align-items: center;
+  border-bottom: 1px solid @baseBorder;
+  padding: 0 10px;
+}
 </style>
