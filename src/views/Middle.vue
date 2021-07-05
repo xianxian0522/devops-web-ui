@@ -1,20 +1,37 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "@/components/Layout.vue"; // @ is an alias to /src
 
-export default defineComponent({
+import devopsRepository from "@/api/devopsRepository";
+import router from "@/router";
+
+export default {
   name: "Middle",
   components: {
-    HelloWorld,
   },
-});
+  setup() {
+    const token = localStorage.getItem('token')
+    const login = async () => {
+      const data = await devopsRepository.login()
+      if (data?.token) {
+        localStorage.setItem('token', data.token)
+        router.push('/biz/index').then()
+      }
+    }
+
+    if (!token) {
+      login()
+    } else {
+      router.push('/biz/index')
+    }
+
+    return {
+
+    }
+  }
+}
 </script>
 <style scoped lang="less">
 

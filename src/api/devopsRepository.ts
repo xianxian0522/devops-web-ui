@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import { LoginResponse } from "@/utils/response";
 
 const API = '/api/v1';
 const ApiLogin = '/api/v1/sso/login';
@@ -11,5 +12,5 @@ if (window.location.hostname.endsWith('dev.ops.sumscope.com')) {
 }
 
 export default {
-  login: () => request.get(ApiLogin),
+  login: () => request.get<LoginResponse>(ApiLogin),
 }
