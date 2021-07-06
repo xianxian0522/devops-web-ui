@@ -73,3 +73,12 @@ export interface AppResponse {
   ReleaseInfo?: {[key: string]: string};
   UpdatedAt?: string;
 }
+export interface Members {
+  CreatedAt?: string;
+  ID: number;
+  Role?: string;
+  UpdatedAt?: string;
+  UserID?: number;
+  UserRealName?: string;
+  Username?: string;
+}
