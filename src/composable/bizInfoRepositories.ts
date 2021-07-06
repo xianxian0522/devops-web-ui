@@ -20,6 +20,8 @@ export default function bizInfoRepositories() {
   watch(() => route.query, (value) => {
     const id = parseInt(value.bizId as string, 10)
     bizId.value = id
+  })
+  watch(bizId, () => {
     getBizInfo().then()
   })
 

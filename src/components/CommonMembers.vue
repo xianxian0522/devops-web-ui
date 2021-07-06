@@ -22,7 +22,7 @@
       </a-form-item>
     </a-form>
   </div>
-  <a-table :columns="columns" :data-source="members" :row-key="(record) => record.ID"
+  <a-table :columns="columns" :data-source="data" :row-key="(record) => record.ID"
            @change="paginationChange"
            :pagination="pagination">
     <template #name="{ text }">
@@ -30,16 +30,17 @@
     </template>
     <template #action="{ record }" >
       <div >
-       <span style="margin-right: 20px">
-         <router-link :to="{path: '/app/' + record.ID + '/members'}">
-<!--           <TeamOutlined />-->
-         </router-link>
-       </span>
-        <span>
-         <router-link :to="{path: '/app/' + record.ID + '/index'}">
-<!--           <EditOutlined />-->
-         </router-link>
-       </span>
+        <a-button type="link" @click="showEditDialog(record)">
+          <EditOutlined />
+        </a-button>
+        <a-popconfirm
+          title="确定要删除吗?"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="confirmDelete"
+        >
+          <a-button type="link"><DeleteOutlined /></a-button>
+        </a-popconfirm>
       </div>
     </template>
   </a-table>
@@ -47,19 +48,22 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { TableState } from "ant-design-vue/es/table/interface";
+import { EditOutlined, DeleteOutlined} from '@ant-design/icons-vue'
 import { Members } from "@/utils/response";
+import * as _ from "lodash";
 
 export default {
   name: "CommonMembers",
   props: {
     members: Array
   },
-  setup() {
+  components: { EditOutlined, DeleteOutlined },
+  setup(props: any) {
     const formState = reactive({
       Username: '',
-      Role: undefined,
+      Role: '',
     })
     const columns = [
       { dataIndex: 'Username', key: 'Username', title: '用户名',},
@@ -71,6 +75,7 @@ export default {
       current: 1,
       pageSize: 10,
     })
+    const data = ref<Members[]>(props.members)
 
     const paginationChange = (page: TableState['pagination']) => {
       pagination.current = page?.current as number
@@ -79,13 +84,46 @@ export default {
     const showCreateDialog = () => {
       console.log(';;;;')
     }
+    const showEditDialog = (col: Members) => {
+      console.log(col)
+    }
+    const confirmDelete = () => {
+      console.log('[[[[')
+    }
+    const debounceUsername = (value: string) => {
+      if (formState.Role) {
+        data.value = props.members.filter((m: Members) => {
+          return (m.Username?.indexOf(value) !== -1 && m.Role?.indexOf(formState.Role) !== -1)
+        })
+      } else {
+        data.value = props.members.filter((m: Members) => m.Username?.indexOf(value) !== -1)
+      }
+    }
+    const debounceRole = (value: string) => {
+      if (formState.Username) {
+        data.value = props.members.filter((m: Members) => {
+          return (m.Username?.indexOf(value) !== -1 && m.Role?.indexOf(formState.Role) !== -1)
+        })
+      } else {
+        data.value = props.members.filter((m: Members) => m.Role?.indexOf(value) !== -1)
+      }
+    }
+    watch(() => formState.Username, _.debounce(debounceUsername, 300))
+    watch(() => formState.Role, _.debounce(debounceRole, 300))
+
+    watch(() => props.members, () => {
+      data.value = props.members
+    })
 
     return {
+      data,
       pagination,
       columns,
       formState,
       showCreateDialog,
+      showEditDialog,
       paginationChange,
+      confirmDelete,
     }
   }
 };

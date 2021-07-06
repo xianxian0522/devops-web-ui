@@ -13,16 +13,16 @@
     </template>
     <template #action="{ record }" >
      <div >
-       <span style="margin-right: 20px">
+       <a-button type="link">
          <router-link :to="{path: '/app/' + record.ID + '/members'}">
            <TeamOutlined />
          </router-link>
-       </span>
-       <span>
+       </a-button>
+       <a-button type="link">
          <router-link :to="{path: '/app/' + record.ID + '/index'}">
            <EditOutlined />
          </router-link>
-       </span>
+       </a-button>
      </div>
     </template>
   </a-table>
@@ -96,11 +96,7 @@ export default {
       pagination.pageSize = page?.pageSize as number
     }
     const debounceName = (value: string) => {
-      if (value === '') {
-        state.appListFilter = state.appList
-      } else {
-        state.appListFilter = state.appList.filter((app: AppResponse) => app.Name?.indexOf(value) !== -1)
-      }
+      state.appListFilter = state.appList.filter((app: AppResponse) => app.Name?.indexOf(value) !== -1)
     }
     onMounted(() => {
       getApp()
@@ -108,6 +104,8 @@ export default {
     watch(() => route.query, (value) => {
       const id = parseInt(value.bizId as string, 10)
       bizId.value = id
+    })
+    watch(bizId, () => {
       getApp()
     })
     watch(() => formState.name, _.debounce(debounceName, 300))
