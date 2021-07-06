@@ -44,7 +44,7 @@ import devopsRepository from "@/api/devopsRepository";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "CommonHeader",
+  name: "CommonLayoutHeader",
   components: {
     UserOutlined, DownOutlined,
   },

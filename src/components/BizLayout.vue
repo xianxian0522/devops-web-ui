@@ -1,7 +1,7 @@
 <template>
   <a-layout class="layout">
     <a-layout-header class="header">
-      <CommonHeader />
+      <CommonLayoutHeader />
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import CommonHeader from "@/components/CommonHeader.vue";
+import CommonLayoutHeader from "@/components/CommonLayoutHeader.vue";
 import { useRoute, useRouter } from "vue-router";
 import bizRepositories from "@/composable/bizRepositories";
 import { onMounted, reactive, ref, toRefs, watch } from "vue";
@@ -66,7 +66,7 @@ import { BarItem } from "@/utils/response";
 export default {
   name: "BizLayout",
   components: {
-    CommonHeader,
+    CommonLayoutHeader,
   },
   setup() {
     const route = useRoute()
