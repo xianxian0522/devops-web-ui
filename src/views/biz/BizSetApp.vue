@@ -12,10 +12,17 @@
       <a>{{ text }}</a>
     </template>
     <template #action="{ record }" >
-     <div style="display: flex">
-        <span>
-          <a>Invite 一 {{ record.Name }}</a>
-        </span>
+     <div >
+       <span style="margin-right: 20px">
+         <router-link :to="{path: '/app/' + record.ID + '/members'}">
+           <TeamOutlined />
+         </router-link>
+       </span>
+       <span>
+         <router-link :to="{path: '/app/' + record.ID + '/index'}">
+           <EditOutlined />
+         </router-link>
+       </span>
      </div>
     </template>
   </a-table>
@@ -29,6 +36,7 @@ import devopsRepository from "@/api/devopsRepository";
 import { useRoute } from "vue-router";
 import { TableState } from "ant-design-vue/es/table/interface";
 import * as _ from "lodash";
+import { TeamOutlined, EditOutlined } from '@ant-design/icons-vue'
 
 export interface AppInfo {
   appList: AppResponse[];
@@ -42,6 +50,10 @@ export default {
       type: Boolean,
       default: true,
     }
+  },
+  components: {
+    TeamOutlined,
+    EditOutlined
   },
   setup(props: any) {
     const route = useRoute()
