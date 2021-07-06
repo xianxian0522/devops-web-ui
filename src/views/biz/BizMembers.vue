@@ -1,6 +1,6 @@
 <template>
 <div>
-  <CommonMembers :members="bizMembers"/>
+  <CommonMembers :members="bizMembers" :id="bizId" @updateMembers="updateMembers"/>
 </div>
 </template>
 
@@ -27,6 +27,9 @@ export default {
         console.error(e)
       }
     }
+    const updateMembers = () => {
+      getMembers()
+    }
     onMounted(() => {
       getMembers()
     })
@@ -40,6 +43,8 @@ export default {
 
     return {
       bizMembers,
+      bizId,
+      updateMembers,
     }
   }
 };

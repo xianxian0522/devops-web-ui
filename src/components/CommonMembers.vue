@@ -37,7 +37,7 @@
           title="确定要删除吗?"
           ok-text="Yes"
           cancel-text="No"
-          @confirm="confirmDelete"
+          @confirm="confirmDelete(record.ID)"
         >
           <a-button type="link"><DeleteOutlined /></a-button>
         </a-popconfirm>
@@ -48,7 +48,13 @@
   <a-modal v-model:visible="visible" :title="modelTitle" @ok="handleSubmit">
     <a-form :model="modalForm" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="用户名" >
-        <a-input v-model:value="modalForm.Username" placeholder="用户名" />
+        <a-select
+          v-model:value="modalForm.UserID"
+          show-search
+          placeholder="Select a User"
+        >
+          <a-select-option v-for="option in userData" :key="option.ID" :value="option.ID">{{ option.Username }}</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="角色">
         <a-select
@@ -73,19 +79,22 @@ import { EditOutlined, DeleteOutlined} from '@ant-design/icons-vue'
 import { Members, UserResponse } from "@/utils/response";
 import * as _ from "lodash";
 import devopsRepository from "@/api/devopsRepository";
+import { message } from "ant-design-vue";
 
 export interface FormModal {
-  Username: string | undefined;
+  UserID: number | undefined;
   Role: string | undefined;
 }
 
 export default {
   name: "CommonMembers",
   props: {
-    members: Array
+    members: Array,
+    id: Number,
   },
+  emits: ['updateMembers'],
   components: { EditOutlined, DeleteOutlined },
-  setup(props: any) {
+  setup(props: any, content: any) {
     const formState = reactive({
       Username: '',
       Role: '',
@@ -109,12 +118,23 @@ export default {
       userData: [] as UserResponse[],
     })
     const modalForm: UnwrapRef<FormModal> = reactive({
-      Username: '',
-      Role: '',
+      UserID: undefined,
+      Role: undefined,
     })
 
-    const handleSubmit = () => {
-      console.log(';;;;submit', modalForm)
+    const handleSubmit = async () => {
+      const value = { ...modalForm }
+      if (!value.UserID || !value.Role) {
+        return message.warning('用户和角色不能为空')
+      }
+      try {
+        await devopsRepository.updateMember(props.id, value)
+        modalState.visible = false
+        message.success(modalState.mode === 'edit' ? '修改成功' : '新增成功')
+        content.emit('updateMembers')
+      } catch (e) {
+        console.error(e)
+      }
     }
     const getUser = async () => {
       modalState.userData = await devopsRepository.queryAllUser()
@@ -123,20 +143,26 @@ export default {
       modalState.visible = true
       modalState.mode = 'create'
       modalState.modelTitle = '新增成员'
-      modalForm.Role = ''
-      modalForm.Username = ''
+      modalForm.Role = undefined
+      modalForm.UserID = undefined
       getUser()
     }
     const showEditDialog = (col: Members) => {
       modalState.visible = true
       modalState.mode = 'edit'
       modalState.modelTitle = '修改成员'
-      modalForm.Username = col.Username
+      modalForm.UserID = col.UserID
       modalForm.Role = col.Role
       getUser()
     }
-    const confirmDelete = () => {
-      console.log('[[[[')
+    const confirmDelete = async (id: number) => {
+      try {
+        await devopsRepository.deleteBizMember(id)
+        message.success('删除成功')
+        content.emit('updateMembers')
+      } catch (e) {
+        console.error(e)
+      }
     }
     const paginationChange = (page: TableState['pagination']) => {
       pagination.current = page?.current as number

@@ -19,8 +19,11 @@ export default {
 
   queryAllUser: () => request.get<UserResponse[]>(`${API}/users`),
 
+  deleteBizMember: (mId: number) => request.get(`${API}/bizmember/${mId}`),
+
   queryAllBiz: () => request.get<BizResponse[]>(`${ApiBiz}`),
   queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),
   queryAppByBizId: (bizId: number) => request.get<AppResponse[]>(`${ApiBiz}/${bizId}/app`),
   queryMembersByBizId: (bizId: number) => request.get<Members[]>(`${ApiBiz}/${bizId}/member`),
+  updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
 }
