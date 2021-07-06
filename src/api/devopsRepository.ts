@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import { AppResponse, BarItem, BizResponse, LoginResponse, Members } from "@/utils/response";
+import { AppResponse, BarItem, BizResponse, LoginResponse, Members, UserResponse } from "@/utils/response";
 
 const API = '/api/v1/my';
 const ApiLogin = '/api/v1/sso/login';
@@ -16,6 +16,8 @@ if (window.location.hostname.endsWith('dev.ops.sumscope.com')) {
 export default {
   queryBar: () => request.get<BarItem[]>(ApiBar),
   login: () => request.get<LoginResponse>(ApiLogin),
+
+  queryAllUser: () => request.get<UserResponse[]>(`${API}/users`),
 
   queryAllBiz: () => request.get<BizResponse[]>(`${ApiBiz}`),
   queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),

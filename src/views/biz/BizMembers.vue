@@ -23,7 +23,6 @@ export default {
     const getMembers = async () => {
       try {
         bizMembers.value = await devopsRepository.queryMembersByBizId(bizId.value)
-        console.log(bizMembers.value,' [[[')
       } catch (e) {
         console.error(e)
       }

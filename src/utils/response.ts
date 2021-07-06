@@ -82,3 +82,8 @@ export interface Members {
   UserRealName?: string;
   Username?: string;
 }
+export interface UserResponse {
+  ID: number;
+  RealName?: string;
+  Username?: string;
+}

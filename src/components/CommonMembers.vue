@@ -4,7 +4,7 @@
     <div>
       <a-button @click="showCreateDialog">添加</a-button>
     </div>
-    <a-form :model="formState" layout="inline" class="biz-app">
+    <a-form :model="formState" layout="inline">
       <a-form-item label="用户名" >
         <a-input v-model:value="formState.Username" placeholder="用户名" />
       </a-form-item>
@@ -44,15 +44,40 @@
       </div>
     </template>
   </a-table>
+
+  <a-modal v-model:visible="visible" :title="modelTitle" @ok="handleSubmit">
+    <a-form :model="modalForm" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="用户名" >
+        <a-input v-model:value="modalForm.Username" placeholder="用户名" />
+      </a-form-item>
+      <a-form-item label="角色">
+        <a-select
+          v-model:value="modalForm.Role"
+          show-search
+          placeholder="Select a role"
+        >
+          <a-select-option value="maintainer">maintainer</a-select-option>
+          <a-select-option value="developer">developer</a-select-option>
+          <a-select-option value="reporter">reporter</a-select-option>
+        </a-select>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </div>
 </template>
 
 <script lang="ts">
-import { onMounted, reactive, ref, toRefs, watch } from "vue";
+import { onMounted, reactive, ref, toRefs, UnwrapRef, watch } from "vue";
 import { TableState } from "ant-design-vue/es/table/interface";
 import { EditOutlined, DeleteOutlined} from '@ant-design/icons-vue'
-import { Members } from "@/utils/response";
+import { Members, UserResponse } from "@/utils/response";
 import * as _ from "lodash";
+import devopsRepository from "@/api/devopsRepository";
+
+export interface FormModal {
+  Username: string | undefined;
+  Role: string | undefined;
+}
 
 export default {
   name: "CommonMembers",
@@ -77,18 +102,45 @@ export default {
     })
     const data = ref<Members[]>(props.members)
 
-    const paginationChange = (page: TableState['pagination']) => {
-      pagination.current = page?.current as number
-      pagination.pageSize = page?.pageSize as number
+    const modalState = reactive({
+      visible: false,
+      mode: '',
+      modelTitle: '',
+      userData: [] as UserResponse[],
+    })
+    const modalForm: UnwrapRef<FormModal> = reactive({
+      Username: '',
+      Role: '',
+    })
+
+    const handleSubmit = () => {
+      console.log(';;;;submit', modalForm)
+    }
+    const getUser = async () => {
+      modalState.userData = await devopsRepository.queryAllUser()
     }
     const showCreateDialog = () => {
-      console.log(';;;;')
+      modalState.visible = true
+      modalState.mode = 'create'
+      modalState.modelTitle = '新增成员'
+      modalForm.Role = ''
+      modalForm.Username = ''
+      getUser()
     }
     const showEditDialog = (col: Members) => {
-      console.log(col)
+      modalState.visible = true
+      modalState.mode = 'edit'
+      modalState.modelTitle = '修改成员'
+      modalForm.Username = col.Username
+      modalForm.Role = col.Role
+      getUser()
     }
     const confirmDelete = () => {
       console.log('[[[[')
+    }
+    const paginationChange = (page: TableState['pagination']) => {
+      pagination.current = page?.current as number
+      pagination.pageSize = page?.pageSize as number
     }
     const debounceUsername = (value: string) => {
       if (formState.Role) {
@@ -116,6 +168,8 @@ export default {
     })
 
     return {
+      ...toRefs(modalState),
+      modalForm,
       data,
       pagination,
       columns,
@@ -124,6 +178,7 @@ export default {
       showEditDialog,
       paginationChange,
       confirmDelete,
+      handleSubmit,
     }
   }
 };
