@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import { BarItem, BizResponse, LoginResponse } from "@/utils/response";
+import { AppResponse, BarItem, BizResponse, LoginResponse } from "@/utils/response";
 
 const API = '/api/v1/my';
 const ApiLogin = '/api/v1/sso/login';
@@ -19,4 +19,5 @@ export default {
 
   queryAllBiz: () => request.get<BizResponse[]>(`${ApiBiz}`),
   queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),
+  queryAppByBizId: (bizId: number) => request.get<AppResponse[]>(`${ApiBiz}/${bizId}/app`),
 }

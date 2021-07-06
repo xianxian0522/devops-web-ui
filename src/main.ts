@@ -4,7 +4,7 @@ import router from "./router";
 import {
   Avatar,
   Button,
-  ConfigProvider, Dropdown, Layout, Menu, Select
+  ConfigProvider, Dropdown, Form, Input, Layout, Menu, Select, Table
 } from "ant-design-vue";
 
 const app = createApp(App)
@@ -17,5 +17,8 @@ app.use(Dropdown)
 app.use(Avatar)
 app.use(Menu)
 app.use(Select)
+app.use(Table)
+app.use(Form)
+app.use(Input)
 
 app.mount("#app");

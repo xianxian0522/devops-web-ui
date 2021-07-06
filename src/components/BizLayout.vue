@@ -58,9 +58,9 @@
 
 <script lang="ts">
 import CommonHeader from "@/components/CommonHeader.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import bizRepositories from "@/composable/bizRepositories";
-import { reactive, ref, toRefs } from "vue";
+import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { BarItem } from "@/utils/response";
 
 export default {
@@ -70,6 +70,7 @@ export default {
   },
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const url = route.path.split('/')
 
     const { bizId, bizList } = bizRepositories()
@@ -94,6 +95,17 @@ export default {
       console.log(input, option)
       return option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
     }
+
+    watch(bizId, value => {
+      router.push({
+        path: route.path,
+        query: { bizId: value }
+      })
+    })
+    onMounted(() => {
+      const id = (route.query?.bizId || '0') as string
+      localStorage.setItem('bizId', id)
+    })
 
     return {
       bar,

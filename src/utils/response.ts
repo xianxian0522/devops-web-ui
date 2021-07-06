@@ -44,4 +44,32 @@ export interface BizResponse {
   Hosts?: Hosts[];
   Owner?: Owner;
 }
-
+export interface BindInfos {
+  Ip?: string;
+  Name?: string;
+  Port?: number;
+  Protocol?: string;
+}
+export interface InstanceTemplate {
+  BindInfos?: BindInfos[];
+  DataDir?: string;
+  EnvVars?: {[key: string]: string}[]
+  LogDir?: string;
+  MetricEndpoint?: string;
+  User?: string;
+  WorkDir?: string;
+  HostID?: number;
+  HostInnerIP?: string;
+  ID?: number;
+  Name?: string;
+}
+export interface AppResponse {
+  CreatedAt?: string;
+  DisplayName?: string;
+  ID: number;
+  InstanceTemplate?: InstanceTemplate;
+  Level?: string;
+  Name?: string;
+  ReleaseInfo?: {[key: string]: string};
+  UpdatedAt?: string;
+}
