@@ -28,6 +28,7 @@ import { AppResponse } from "@/utils/response";
 import devopsRepository from "@/api/devopsRepository";
 import { useRoute } from "vue-router";
 import { TableState } from "ant-design-vue/es/table/interface";
+import * as _ from "lodash";
 
 export interface AppInfo {
   appList: AppResponse[];
@@ -82,7 +83,13 @@ export default {
       pagination.current = page?.current as number
       pagination.pageSize = page?.pageSize as number
     }
-
+    const debounceName = (value: string) => {
+      if (value === '') {
+        state.appListFilter = state.appList
+      } else {
+        state.appListFilter = state.appList.filter((app: AppResponse) => app.Name?.indexOf(value) !== -1)
+      }
+    }
     onMounted(() => {
       getApp()
     })
@@ -91,6 +98,7 @@ export default {
       bizId.value = id
       getApp()
     })
+    watch(() => formState.name, _.debounce(debounceName, 300))
 
     return {
       formState,
