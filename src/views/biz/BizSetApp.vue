@@ -5,7 +5,9 @@
       <a-input v-model:value="formState.name" placeholder="请输入名字" />
     </a-form-item>
   </a-form>
-  <a-table :columns="columns" :data-source="appListFilter" :row-key="(record) => record.ID">
+  <a-table :columns="columns" :data-source="appListFilter" :row-key="(record) => record.ID"
+           @change="paginationChange"
+           :pagination="pagination">
     <template #name="{ text }">
       <a>{{ text }}</a>
     </template>
@@ -25,6 +27,7 @@ import { onMounted, reactive, ref, toRefs, UnwrapRef, watch } from "vue";
 import { AppResponse } from "@/utils/response";
 import devopsRepository from "@/api/devopsRepository";
 import { useRoute } from "vue-router";
+import { TableState } from "ant-design-vue/es/table/interface";
 
 export interface AppInfo {
   appList: AppResponse[];
@@ -58,6 +61,11 @@ export default {
     const formState = reactive({
       name: '',
     })
+    const pagination = reactive({
+      showSizeChanger: true,
+      current: 1,
+      pageSize: 10,
+    })
 
     const getApp = async () => {
       try {
@@ -69,6 +77,10 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    }
+    const paginationChange = (page: TableState['pagination']) => {
+      pagination.current = page?.current as number
+      pagination.pageSize = page?.pageSize as number
     }
 
     onMounted(() => {
@@ -83,6 +95,8 @@ export default {
     return {
       formState,
       columns,
+      pagination,
+      paginationChange,
       ...toRefs(state),
     }
   }
