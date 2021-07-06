@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import {
-  Avatar,
+  Avatar, Collapse,
   Button,
   ConfigProvider, Dropdown, Form, Input, Layout, Menu, Modal, Popconfirm, Select, Table
 } from "ant-design-vue";
@@ -22,5 +22,6 @@ app.use(Form)
 app.use(Input)
 app.use(Popconfirm)
 app.use(Modal)
+app.use(Collapse)
 
 app.mount("#app");

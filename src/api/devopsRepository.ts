@@ -26,4 +26,5 @@ export default {
   queryAppByBizId: (bizId: number) => request.get<AppResponse[]>(`${ApiBiz}/${bizId}/app`),
   queryMembersByBizId: (bizId: number) => request.get<Members[]>(`${ApiBiz}/${bizId}/member`),
   updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
+  updateBizInfo: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}`, params),
 }
