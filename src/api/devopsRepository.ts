@@ -33,4 +33,8 @@ export default {
   distributionHostToApp: (bizId: number, appId: number, hostId: number) => request.post(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
 
   queryAppInfoById: (appId: number) => request.get<AppResponse>(`${ApiApp}/${appId}`),
+  queryMembersByAppId: (appId: number) => request.get<Members[]>(`${ApiApp}/${appId}/member`),
+  updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
+  transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),
+
 }

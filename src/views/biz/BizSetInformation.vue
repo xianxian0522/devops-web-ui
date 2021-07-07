@@ -103,10 +103,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-.set-information {
-  display: flex;
-  button {
-    margin-left: 10px;
-  }
-}
+@import "../../components/index.less";
 </style>
