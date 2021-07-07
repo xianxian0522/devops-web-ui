@@ -31,5 +31,6 @@ export default function bizHostRepositories() {
     data,
     hostList,
     bizId,
+    getHost,
   }
 }

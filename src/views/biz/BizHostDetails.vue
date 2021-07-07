@@ -27,14 +27,17 @@
   </a-table>
 
   <a-modal v-model:visible="visible" title="分配应用" @ok="distributionApp">
-    <a-select
-      mode="multiple"
-      placeholder="Please select"
-      show-search
-      v-model:value="appsId"
-    >
-      <a-select-option v-for="option in appList" :key="option.ID" :value="option.ID">{{ option.Username }}</a-select-option>
-    </a-select>
+    <div style="width: 100%">
+      <a-select
+        mode="multiple"
+        placeholder="Please select App"
+        show-search
+        style="width: 100%;"
+        v-model:value="appsId"
+      >
+        <a-select-option v-for="option in appList" :key="option.ID" :value="option.ID">{{ option.Name }}</a-select-option>
+      </a-select>
+    </div>
   </a-modal>
 </div>
 </template>
@@ -52,12 +55,13 @@ export interface Modal {
   appsId: number[];
   oldAppsId: number[];
   appList: AppResponse[],
+  hostId: number,
 }
 
 export default {
   name: "BizHostDetails",
   setup() {
-    const { bizId, hostList, data } = bizHostRepositories()
+    const { bizId, hostList, data, getHost } = bizHostRepositories()
     const formState = reactive({
       Hostname: '',
       InnerIP: '',
@@ -90,6 +94,7 @@ export default {
       appsId: [],
       oldAppsId: [],
       appList: [],
+      hostId: 0,
     })
     const getApp = async () => {
       try {
@@ -100,6 +105,8 @@ export default {
     }
     const showModal = (host: Hosts) => {
       modalState.visible = true
+      modalState.appsId = []
+      modalState.hostId = host.ID
       if (host.Apps) {
         const appsId = host.Apps.map((app: AppResponse) => app.ID)
         modalState.oldAppsId = appsId
@@ -109,7 +116,19 @@ export default {
     }
     const distributionApp = async () => {
       try {
-        console.log('[[[[')
+        const value = modalState.appsId;
+        await modalState.oldAppsId.map(oldAppId => {
+          if (!value.includes(oldAppId)) {
+            devopsRepository.deleteDistributionHostToApp(bizId.value, oldAppId, modalState.hostId)
+          }
+        });
+        await value.map(appId => {
+          if (!modalState.oldAppsId.includes(appId)) {
+            devopsRepository.distributionHostToApp(bizId.value, appId, modalState.hostId)
+          }
+        });
+        modalState.visible = false
+        await getHost()
       } catch (e) {
         console.error(e)
       }

@@ -29,5 +29,6 @@ export default {
   updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
   updateBizInfo: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}`, params),
   transferOwnerByBizId: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}/transfer`, params),
-
+  deleteDistributionHostToApp: (bizId: number, appId: number, hostId: number) => request.delete(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
+  distributionHostToApp: (bizId: number, appId: number, hostId: number) => request.post(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
 }

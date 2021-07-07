@@ -60,4 +60,11 @@ export default {
         .catch(err => reject(err))
     })
   },
+  delete<T>(url: string, params = {}){
+    return new Promise<T>((resolve, reject) => {
+      service.delete(url, {params})
+        .then(res => resolve(res.data))
+        .catch(err => reject(err))
+    })
+  }
 }
