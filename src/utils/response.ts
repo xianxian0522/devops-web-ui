@@ -79,7 +79,7 @@ export interface User {
   Username?: string;
 }
 export interface Hosts {
-  Apps?: AppResponse;
+  Apps?: AppResponse[];
   BizStatus?: string;
   Comment?: string;
   CreatedAt?: string;
