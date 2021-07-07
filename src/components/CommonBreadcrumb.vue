@@ -7,6 +7,9 @@
     <a-breadcrumb-item>
       <slot name="second"></slot>
     </a-breadcrumb-item>
+    <a-breadcrumb-item v-if="three">
+      <slot name="three"></slot>
+    </a-breadcrumb-item>
   </a-breadcrumb>
 </div>
 </template>
@@ -14,6 +17,9 @@
 <script lang="ts">
 export default {
   name: "CommonBreadcrumb",
+  props: {
+    three: Boolean
+  },
 };
 </script>
 

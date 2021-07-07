@@ -104,3 +104,57 @@ export interface Hosts {
   OsVersion?: string;
   UpdatedAt?: string;
 }
+export interface Instance {
+  BindInfos?: BindInfos[];
+  Comment?: string;
+  CreatedAt?: string;
+  EnvVars?: {[key: string]: string}[];
+  ID: number;
+  Name?: string;
+  ReplicaSet?: ReplicaSet;
+  State?: string;
+  UpdatedAt?: string;
+  User?: string;
+}
+export interface Cluster {
+  App?: AppResponse;
+  Comment?: string;
+  CreatedAt?: string;
+  ID: number;
+  InstanceTemplate?: InstanceTemplate;
+  Name?: string
+  UpdatedAt?: string;
+}
+export interface Env {
+  CreatedAt?: string;
+  DisplayName?: string;
+  EnvVars?: {[key: string]: string}[];
+  ID: number;
+  Name?: string;
+  UpdatedAt?: string;
+}
+export interface LogicIdc {
+  CreatedAt?: string;
+  DisplayName?: string;
+  EnvVars?: {[key: string]: string}[];
+  ID?: number;
+  Name?: string;
+  UpdatedAt?: string;
+}
+export interface LogicIdcEnv {
+  CreatedAt?: string;
+  Env?: Env;
+  EnvVars?: {[key: string]: string}[];
+  ID: number;
+  LogicIdc?: LogicIdc;
+  UpdatedAt?: string;
+}
+export interface ReplicaSet {
+  Cluster?: Cluster;
+  Comment?: string;
+  CreatedAt?: string;
+  ID: number;
+  InstanceTemplate?: InstanceTemplate;
+  LogicIdcEnv?: LogicIdcEnv;
+  UpdatedAt?: string;
+}
