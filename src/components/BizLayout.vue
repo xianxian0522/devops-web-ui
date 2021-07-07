@@ -102,6 +102,10 @@ export default {
         query: { bizId: value }
       })
     })
+    watch(() => route.path, value => {
+      const url = value.split('/')
+      state.selectedKeysMenu = [url[2]]
+    })
     onMounted(() => {
       const id = (route.query?.bizId || '0') as string
       localStorage.setItem('bizId', id)

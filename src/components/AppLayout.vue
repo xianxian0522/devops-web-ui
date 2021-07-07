@@ -50,7 +50,7 @@
 import CommonLayoutHeader from "@/components/CommonLayoutHeader.vue";
 import { useRoute, } from "vue-router";
 import { BarItem } from "@/utils/response";
-import { reactive, ref, toRefs } from "vue";
+import { reactive, ref, toRefs, watch } from "vue";
 import appInfoRepositories from "@/composable/appInfoRepositories";
 export default {
   name: "AppLayout",
@@ -59,7 +59,6 @@ export default {
     const route = useRoute()
     const url = route.path.split('/')
     const { appInfo, appId } = appInfoRepositories()
-
     const state = reactive({
       openKeys: ['setup'],
       selectedKeysMenu: [url[3]],
@@ -75,6 +74,11 @@ export default {
       },
       {id: 6, icon: '', path: 'host-details', name: '机器详情'},
     ])
+
+    watch(() => route.path, value => {
+      const url = value.split('/')
+      state.selectedKeysMenu = [url[3]]
+    })
 
     return {
       bar,
