@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import { AppResponse, BarItem, BizResponse, LoginResponse, Members, UserResponse } from "@/utils/response";
+import { AppResponse, BarItem, BizResponse, Hosts, LoginResponse, Members, UserResponse } from "@/utils/response";
 
 const API = '/api/v1/my';
 const ApiLogin = '/api/v1/sso/login';
@@ -25,7 +25,9 @@ export default {
   queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),
   queryAppByBizId: (bizId: number) => request.get<AppResponse[]>(`${ApiBiz}/${bizId}/app`),
   queryMembersByBizId: (bizId: number) => request.get<Members[]>(`${ApiBiz}/${bizId}/member`),
+  queryHostsByBizId: (bizId: number) => request.get<Hosts[]>(`${ApiBiz}/${bizId}/host`),
   updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
   updateBizInfo: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}`, params),
   transferOwnerByBizId: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}/transfer`, params),
+
 }

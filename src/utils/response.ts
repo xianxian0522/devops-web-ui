@@ -10,30 +10,6 @@ export interface BarItem {
   route?: string;
   children?: BarItem[];
 }
-export interface Hosts {
-  BizStatus: string;
-  Comment: string;
-  CreatedAt: string;
-  Detail: string;
-  Hostname: string;
-  ID: number;
-  InnerIP: number;
-  LgDevType: string;
-  Name: string;
-  OsBit: string;
-  OsDetail: string;
-  OsName: string;
-  OsType: string;
-  OsVersion: string;
-  UpdatedAt: string;
-}
-export interface Owner {
-  CreatedAt: string;
-  ID: number;
-  State: string;
-  UpdatedAt: string;
-  Username: string;
-}
 export interface BizResponse {
   Comment?: string;
   CreatedAt?: string;
@@ -42,7 +18,7 @@ export interface BizResponse {
   Name?: string;
   UpdatedAt?: string;
   Hosts?: Hosts[];
-  Owner?: Owner;
+  Owner?: User;
 }
 export interface BindInfos {
   Ip?: string;
@@ -67,11 +43,15 @@ export interface AppResponse {
   CreatedAt?: string;
   DisplayName?: string;
   ID: number;
+  Comment?: string;
   InstanceTemplate?: InstanceTemplate;
   Level?: string;
   Name?: string;
   ReleaseInfo?: {[key: string]: string};
   UpdatedAt?: string;
+  AppMembers?: Members[];
+  Hosts?: Hosts[];
+  Owner?: User;
 }
 export interface Members {
   CreatedAt?: string;
@@ -86,4 +66,41 @@ export interface UserResponse {
   ID: number;
   RealName?: string;
   Username?: string;
+}
+export interface User {
+  CreatedAt?: string;
+  DingTalkUserID?: string;
+  ID: number;
+  Mail?: string;
+  Password?: string;
+  RealName?: string;
+  State?: string;
+  UpdatedAt?: string;
+  Username?: string;
+}
+export interface Hosts {
+  Apps?: AppResponse;
+  BizStatus?: string;
+  Comment?: string;
+  CreatedAt?: string;
+  Detail?: string;
+  Disk?: [
+    {
+      Device: string;
+      FsType: string;
+      MountPoint: string;
+      SizeGB: number
+    }
+  ];
+  Hostname?: string;
+  ID: number;
+  InnerIP?: string;
+  LgDevType?: string;
+  Name?: string;
+  OsBit?: string;
+  OsDetail?: string;
+  OsName?: string;
+  OsType?: string;
+  OsVersion?: string;
+  UpdatedAt?: string;
 }
