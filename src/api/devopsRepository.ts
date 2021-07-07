@@ -19,14 +19,15 @@ export default {
 
   queryAllUser: () => request.get<UserResponse[]>(`${API}/users`),
 
-  deleteBizMember: (mId: number) => request.get(`${API}/bizmember/${mId}`),
+  deleteBizMember: (mId: number) => request.delete(`${API}/bizmember/${mId}`),
+  deleteAppMember: (mId: number) => request.delete(`${API}/appmember/${mId}`),
 
   queryAllBiz: () => request.get<BizResponse[]>(`${ApiBiz}`),
   queryBizInfoById: (bizId: number) => request.get<BizResponse>(`${ApiBiz}/${bizId}`),
   queryAppByBizId: (bizId: number) => request.get<AppResponse[]>(`${ApiBiz}/${bizId}/app`),
   queryMembersByBizId: (bizId: number) => request.get<Members[]>(`${ApiBiz}/${bizId}/member`),
   queryHostsByBizId: (bizId: number) => request.get<Hosts[]>(`${ApiBiz}/${bizId}/host`),
-  updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
+  updateBizMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
   updateBizInfo: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}`, params),
   transferOwnerByBizId: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}/transfer`, params),
   deleteDistributionHostToApp: (bizId: number, appId: number, hostId: number) => request.delete(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
@@ -34,6 +35,7 @@ export default {
 
   queryAppInfoById: (appId: number) => request.get<AppResponse>(`${ApiApp}/${appId}`),
   queryMembersByAppId: (appId: number) => request.get<Members[]>(`${ApiApp}/${appId}/member`),
+  updateAppMember: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/member`, params),
   updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
   transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),
 

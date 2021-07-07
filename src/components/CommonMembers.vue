@@ -91,6 +91,7 @@ export default {
   props: {
     members: Array,
     id: Number,
+    app: Boolean,
   },
   emits: ['updateMembers'],
   components: { EditOutlined, DeleteOutlined },
@@ -128,7 +129,11 @@ export default {
         return message.warning('用户和角色不能为空')
       }
       try {
-        await devopsRepository.updateMember(props.id, value)
+        if (props.app) {
+          await devopsRepository.updateAppMember(props.id, value)
+        } else {
+          await devopsRepository.updateBizMember(props.id, value)
+        }
         modalState.visible = false
         message.success(modalState.mode === 'edit' ? '修改成功' : '新增成功')
         content.emit('updateMembers')
@@ -157,7 +162,11 @@ export default {
     }
     const confirmDelete = async (id: number) => {
       try {
-        await devopsRepository.deleteBizMember(id)
+        if (props.app) {
+          await devopsRepository.deleteAppMember(id)
+        } else {
+          await devopsRepository.deleteBizMember(id)
+        }
         message.success('删除成功')
         content.emit('updateMembers')
       } catch (e) {
