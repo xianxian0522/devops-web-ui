@@ -2,7 +2,7 @@ import request from "@/utils/request";
 import {
   AppResponse,
   BarItem,
-  BizResponse,
+  BizResponse, Cluster,
   Hosts,
   Instance,
   LoginResponse,
@@ -46,6 +46,7 @@ export default {
   queryMembersByAppId: (appId: number) => request.get<Members[]>(`${ApiApp}/${appId}/member`),
   queryHostsByAppId: (appId: number) => request.get<Hosts[]>(`${ApiApp}/${appId}/host`),
   queryAppHostInstance: (appId: number, hostId: number) => request.get<Instance[]>(`${ApiApp}/${appId}/host/${hostId}/instance`),
+  queryClusterByAppId: (appId: number) => request.get<Cluster[]>(`${ApiApp}/${appId}/cluster`),
   updateAppMember: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/member`, params),
   updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
   transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),

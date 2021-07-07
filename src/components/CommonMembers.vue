@@ -220,11 +220,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-.biz-members-content-header {
-  display: flex;
-  margin-bottom: 10px;
-  button {
-    margin-right: 10px;
-  }
-}
+@import "index.less";
 </style>

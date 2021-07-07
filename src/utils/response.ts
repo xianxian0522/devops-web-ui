@@ -124,6 +124,7 @@ export interface Cluster {
   InstanceTemplate?: InstanceTemplate;
   Name?: string
   UpdatedAt?: string;
+  ReplicaSets?: ReplicaSet[];
 }
 export interface Env {
   CreatedAt?: string;
@@ -158,3 +159,4 @@ export interface ReplicaSet {
   LogicIdcEnv?: LogicIdcEnv;
   UpdatedAt?: string;
 }
+
