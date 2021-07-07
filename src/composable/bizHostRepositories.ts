@@ -5,14 +5,14 @@ import { Hosts } from "@/utils/response";
 
 export default function bizHostRepositories() {
   const hostList = ref<Hosts[]>([])
-  const data = ref<Hosts[]>([])
+  // const data = ref<Hosts[]>([])
   const route = useRoute()
   const bizId = ref(parseInt(route.query.bizId as string, 10))
   const getHost = async () => {
     try {
       if (bizId.value > 0) {
         hostList.value = await devopsRepository.queryHostsByBizId(bizId.value)
-        data.value = hostList.value
+        // data.value = hostList.value
       }
     } catch (e) {
       console.error(e)
@@ -28,7 +28,7 @@ export default function bizHostRepositories() {
   })
 
   return {
-    data,
+    // data,
     hostList,
     bizId,
     getHost,

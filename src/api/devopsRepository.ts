@@ -35,6 +35,7 @@ export default {
 
   queryAppInfoById: (appId: number) => request.get<AppResponse>(`${ApiApp}/${appId}`),
   queryMembersByAppId: (appId: number) => request.get<Members[]>(`${ApiApp}/${appId}/member`),
+  queryHostsByAppId: (appId: number) => request.get<Hosts[]>(`${ApiApp}/${appId}/host`),
   updateAppMember: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/member`, params),
   updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
   transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),
