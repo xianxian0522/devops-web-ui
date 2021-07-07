@@ -31,4 +31,6 @@ export default {
   transferOwnerByBizId: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}/transfer`, params),
   deleteDistributionHostToApp: (bizId: number, appId: number, hostId: number) => request.delete(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
   distributionHostToApp: (bizId: number, appId: number, hostId: number) => request.post(`${ApiBiz}/${bizId}/app/${appId}/host/${hostId}`),
+
+  queryAppInfoById: (appId: number) => request.get<AppResponse>(`${ApiApp}/${appId}`),
 }

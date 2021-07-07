@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import {
   Avatar, Collapse,
-  Button,
+  Button, Breadcrumb,
   ConfigProvider, Dropdown, Form, Input, Layout, Menu, Modal, Popconfirm, Select, Table, Tag
 } from "ant-design-vue";
 
@@ -24,5 +24,6 @@ app.use(Popconfirm)
 app.use(Modal)
 app.use(Tag)
 app.use(Collapse)
+app.use(Breadcrumb)
 
 app.mount("#app");
