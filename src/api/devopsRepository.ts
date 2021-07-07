@@ -27,4 +27,5 @@ export default {
   queryMembersByBizId: (bizId: number) => request.get<Members[]>(`${ApiBiz}/${bizId}/member`),
   updateMember: (bizId: number, params: any) => request.post(`${ApiBiz}/${bizId}/member`, params),
   updateBizInfo: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}`, params),
+  transferOwnerByBizId: (bizId: number, params: any) => request.patch(`${ApiBiz}/${bizId}/transfer`, params),
 }
