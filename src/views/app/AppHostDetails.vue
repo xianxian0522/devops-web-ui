@@ -6,7 +6,10 @@
   </CommonBreadcrumb>
   <CommonHost :host-list="hostList" :id="appId">
     <template v-slot:default="slotProps">
-      <a-button type="link" >分配{{slotProps.host.ID}}</a-button>
+      <a-button type="link" >
+        <router-link :to="{path: 'host-details/instance/' + slotProps.host.ID}">实例</router-link>
+      </a-button>
+      <a-button type="link" >终端</a-button>
     </template>
   </CommonHost>
 </div>

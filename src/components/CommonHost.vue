@@ -60,7 +60,7 @@ export default {
       { dataIndex: 'State', key: 'State', title: '状态'},
       { dataIndex: 'Comment', key: 'Comment', title: '备注',},
       { title: '操作', key: 'action', slots: { customRender: 'action', },
-        align: 'center', width: 100, fixed: 'right'}
+        align: 'center', width: 170, fixed: 'right'}
     ]
     const pagination = reactive({
       showSizeChanger: true,
