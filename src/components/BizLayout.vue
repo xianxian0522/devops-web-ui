@@ -119,49 +119,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-@baseBorder: #DCDEE5;
-.layout {
-  width: 100vw;
-  height: inherit;
-}
-// 侧边栏滚动
-.ant-layout-sider {
-  overflow: auto;
-}
-.common-content {
-  background: #fff;
-  border-left: 1px solid #DCDEE5;
-  padding: 20px;
-}
-.layout /deep/ .ant-layout-header {
-  height: 58px;
-  display: flex;
-  padding: 0 40px;
-}
-.menu-side {
-  text-align: left;
-  a::before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: transparent;
-    content: '';
-  }
-  a {
-    color: rgba(0, 0, 0, 0.85);
-  }
-  .ant-menu-item-selected a, a:hover {
-    color: #1890ff;
-  }
-}
-.select-menu-contain {
-  display: flex;
-  justify-content: center;
-  height: 53px;
-  align-items: center;
-  border-bottom: 1px solid @baseBorder;
-  padding: 0 10px;
-}
+@import "index.less";
 </style>
