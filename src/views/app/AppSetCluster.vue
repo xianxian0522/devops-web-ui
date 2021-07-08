@@ -22,15 +22,15 @@
     </template>
     <template #action="{ record }" >
       <div >
-        <a-button type="link" @click="showEditDialog(record)">
-          <EditOutlined />
+        <a-button type="link" >
+          <router-link :to="{path: 'set-cluster/edit/' + record.ID}"><EditOutlined /></router-link>
         </a-button>
         <a-button type="link">实例配置</a-button>
       </div>
     </template>
   </a-table>
 
-  <a-modal v-model:visible="visible" title="添加" @ok="addCluster">
+  <a-modal v-model:visible="visible" title="添加集群" @ok="addCluster">
     <a-form :model="modalForm" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="集群名" >
         <a-input v-model:value="modalForm.Name" placeholder="集群名" />
@@ -89,13 +89,10 @@ export default {
       modalForm.Name = ''
       modalForm.Comment = ''
     }
-    const showEditDialog = (cluster: Cluster) => {
-      console.log(cluster)
-    }
     const addCluster = async () => {
       const value = {...modalForm}
       try {
-        await devopsRepository.updateAppCluster(appId.value, value)
+        await devopsRepository.addAppCluster(appId.value, value)
         modalState.visible = false
         message.success('添加成功')
         await getCluster()
@@ -117,7 +114,6 @@ export default {
       ...toRefs(modalState),
       paginationChange,
       showCreateDialog,
-      showEditDialog,
       addCluster,
     }
   }

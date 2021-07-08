@@ -4,9 +4,9 @@ import {
   BarItem,
   BizResponse, Cluster,
   Hosts,
-  Instance,
+  Instance, LogicIdcEnv,
   LoginResponse,
-  Members,
+  Members, ReplicaSet,
   UserResponse
 } from "@/utils/response";
 
@@ -14,6 +14,7 @@ const API = '/api/v1/my';
 const ApiLogin = '/api/v1/sso/login';
 const ApiBiz = `${API}/biz`;
 const ApiApp = `${API}/app`;
+const ApiCluster = `${API}/cluster`;
 
 let ApiBar = '/api/my/bar';
 if (window.location.hostname.endsWith('dev.ops.sumscope.com')) {
@@ -27,6 +28,12 @@ export default {
   login: () => request.get<LoginResponse>(ApiLogin),
 
   queryAllUser: () => request.get<UserResponse[]>(`${API}/users`),
+
+  queryClusterInfoByCluId: (cId: number) => request.get<Cluster>(`${ApiCluster}/${cId}`),
+  queryRsByCluId: (cId: number) => request.get<ReplicaSet[]>(`${ApiCluster}/${cId}/rs`),
+  updateClusterByCluId: (cId: number, params: any) => request.patch(`${ApiCluster}/${cId}`, params),
+
+  queryLogicIdcEnv: () => request.get<LogicIdcEnv[]>(`${API}/logicidcenv`),
 
   deleteBizMember: (mId: number) => request.delete(`${API}/bizmember/${mId}`),
   deleteAppMember: (mId: number) => request.delete(`${API}/appmember/${mId}`),
@@ -49,7 +56,7 @@ export default {
   queryClusterByAppId: (appId: number) => request.get<Cluster[]>(`${ApiApp}/${appId}/cluster`),
   updateAppMember: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/member`, params),
   updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
-  updateAppCluster: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/cluster`, params),
+  addAppCluster: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/cluster`, params),
   transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),
 
 }
