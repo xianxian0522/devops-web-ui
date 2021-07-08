@@ -25,7 +25,7 @@
         <div class="common-margin">实例模板</div>
         <CommonForm :instance="clusterInfo?.InstanceTemplate" @updateInstance="updateInstance"/>
         <div class="common-margin">绑定机房环境</div>
-        <CommonTree />
+        <CommonTree :nodesTree="nodesTree" />
       </div>
     </a-collapse-panel>
   </a-collapse>
@@ -36,7 +36,7 @@
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
 import CommonForm from "@/components/CommonForm.vue";
 import CommonTree from "@/components/CommonTree.vue";
-import { onMounted, reactive, watch } from "vue";
+import { reactive, watch } from "vue";
 import { CaretRightOutlined } from '@ant-design/icons-vue'
 import appClusterInfoRepositories from "@/composable/appClusterInfoRepositories";
 import devopsRepository from "@/api/devopsRepository";
@@ -56,7 +56,7 @@ export default {
     CaretRightOutlined,
   },
   setup() {
-    const { clusterInfo, clusterId, getLogicIdcEnv } = appClusterInfoRepositories()
+    const { clusterInfo, clusterId, nodesTree } = appClusterInfoRepositories()
     const customStyle =
       'background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden';
     const formState = reactive({
@@ -86,14 +86,12 @@ export default {
       formState.Comment = value?.Comment
       formState.Name = value?.Name
     })
-    onMounted(() => {
-      getLogicIdcEnv()
-    })
 
     return {
       formState,
       customStyle,
       clusterInfo,
+      nodesTree,
       updateCluster,
       updateInstance,
     }

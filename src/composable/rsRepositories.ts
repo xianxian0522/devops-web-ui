@@ -5,7 +5,7 @@ import { ReplicaSet } from "@/utils/response";
 
 export default function rsRepositories() {
   const rsList = ref<ReplicaSet[]>()
-  const rsIds = ref<(number | undefined)[]>([])
+  // const rsIds = ref<(number | undefined)[]>([])
   const route = useRoute()
   const appId = ref(parseInt(route.params.appId as string, 10))
   const clusterId = ref(parseInt(route.params.clusterId as string, 10))
@@ -13,7 +13,7 @@ export default function rsRepositories() {
   const getRs = async () => {
     try {
       rsList.value = await devopsRepository.queryRsByCluId(clusterId.value)
-      rsIds.value = rsList.value?.map(r => r.LogicIdcEnv?.ID)
+      // rsIds.value = rsList.value?.map(r => r.LogicIdcEnv?.ID)
     } catch (e) {
       console.error(e)
     }
@@ -21,7 +21,7 @@ export default function rsRepositories() {
 
 
   return {
-    rsIds,
+    // rsIds,
     rsList,
     clusterId,
     appId,

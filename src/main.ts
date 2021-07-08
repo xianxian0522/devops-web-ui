@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import {
   Avatar, Collapse, InputNumber,
-  Button, Breadcrumb,
+  Button, Breadcrumb, Checkbox,
   ConfigProvider, Dropdown, Form, Input, Layout, Menu, Modal, Popconfirm, Select, Table, Tag
 } from "ant-design-vue";
 
@@ -20,6 +20,7 @@ app.use(Select)
 app.use(Table)
 app.use(Form)
 app.use(Input)
+app.use(Checkbox)
 app.use(Popconfirm)
 app.use(Modal)
 app.use(Tag)

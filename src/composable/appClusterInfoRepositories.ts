@@ -2,27 +2,19 @@ import { onMounted, ref } from "vue";
 import { Cluster, LogicIdcEnv, NodeTree, ReplicaSet } from "@/utils/response";
 import { useRoute } from "vue-router";
 import devopsRepository from "@/api/devopsRepository";
+import rsRepositories from "@/composable/rsRepositories";
 
 export default function appClusterInfoRepositories() {
   const clusterInfo = ref<Cluster>()
   const logicIdcEnv = ref<LogicIdcEnv[]>([])
-  const rsList = ref<ReplicaSet[]>()
-  const rsIds = ref<(number | undefined)[]>([])
+  const nodesTree = ref<NodeTree[]>([])
+
   const route = useRoute()
   const appId = ref(parseInt(route.params.appId as string, 10))
   const clusterId = ref(parseInt(route.params.clusterId as string, 10))
   const getClusterInfo = async () => {
     try {
       clusterInfo.value = await devopsRepository.queryClusterInfoByCluId(clusterId.value)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const getRs = async () => {
-    try {
-      rsList.value = await devopsRepository.queryRsByCluId(clusterId.value)
-      rsIds.value = rsList.value?.map(r => r.LogicIdcEnv?.ID)
     } catch (e) {
       console.error(e)
     }
@@ -40,10 +32,10 @@ export default function appClusterInfoRepositories() {
           obj[item.logicIdcID] = true;
         }
       })
-      await getRs()
-      const nodesTree: NodeTree[] = []
+      const rsList = await devopsRepository.queryRsByCluId(clusterId.value)
+      const rsIds = rsList.map(r => r.LogicIdcEnv?.ID)
       result.forEach((l: any, index: number) => {
-        nodesTree.push({
+        nodesTree.value.push({
           title: l.name,
           key: l.logicIdcID,
           expanded: true,
@@ -51,8 +43,8 @@ export default function appClusterInfoRepositories() {
         })
         logicIdcEnv.value.forEach((logic: LogicIdcEnv) => {
           if (logic.LogicIdc.ID === l.logicIdcID) {
-            if (rsIds.value.includes(logic.ID)) {
-              (nodesTree[index].children as NodeTree[]).push({
+            if (rsIds.includes(logic.ID)) {
+              (nodesTree.value[index].children as NodeTree[]).push({
                 id: logic.ID,
                 title: logic.Env?.Name,
                 key: logic.ID + '-' + l.logicIdcID + '-' + logic.Env?.ID,
@@ -60,7 +52,7 @@ export default function appClusterInfoRepositories() {
                 selected: true
               })
             } else {
-              (nodesTree[index].children as NodeTree[]).push({
+              (nodesTree.value[index].children as NodeTree[]).push({
                 id: logic.ID,
                 title: logic.Env?.Name,
                 key: logic.ID + '-' + l.logicIdcID + '-' + logic.Env?.ID,
@@ -79,12 +71,14 @@ export default function appClusterInfoRepositories() {
 
   onMounted(() => {
     getClusterInfo().then()
+    getLogicIdcEnv().then()
   })
 
   return {
     clusterId,
     clusterInfo,
     appId,
+    nodesTree,
     getClusterInfo,
     getLogicIdcEnv,
   }
