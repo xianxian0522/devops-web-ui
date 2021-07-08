@@ -137,23 +137,23 @@ export interface Env {
   DisplayName?: string;
   EnvVars?: EnvVar[];
   ID: number;
-  Name?: string;
+  Name: string;
   UpdatedAt?: string;
 }
 export interface LogicIdc {
   CreatedAt?: string;
   DisplayName?: string;
   EnvVars?: EnvVar[];
-  ID?: number;
-  Name?: string;
+  ID: number;
+  Name: string;
   UpdatedAt?: string;
 }
 export interface LogicIdcEnv {
   CreatedAt?: string;
-  Env?: Env;
+  Env: Env;
   EnvVars?: EnvVar[];
   ID: number;
-  LogicIdc?: LogicIdc;
+  LogicIdc: LogicIdc;
   UpdatedAt?: string;
 }
 export interface ReplicaSet {
@@ -162,7 +162,16 @@ export interface ReplicaSet {
   CreatedAt?: string;
   ID: number;
   InstanceTemplate?: InstanceTemplate;
-  LogicIdcEnv?: LogicIdcEnv;
+  LogicIdcEnv: LogicIdcEnv;
   UpdatedAt?: string;
+}
+export interface NodeTree {
+  id?: number;
+  title: string;
+  key: string;
+  checked?: boolean;
+  selected?: boolean;
+  expanded?: boolean;
+  children?: NodeTree[];
 }
 

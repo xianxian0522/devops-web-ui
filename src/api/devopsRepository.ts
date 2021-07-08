@@ -32,6 +32,8 @@ export default {
   queryClusterInfoByCluId: (cId: number) => request.get<Cluster>(`${ApiCluster}/${cId}`),
   queryRsByCluId: (cId: number) => request.get<ReplicaSet[]>(`${ApiCluster}/${cId}/rs`),
   updateClusterByCluId: (cId: number, params: any) => request.patch(`${ApiCluster}/${cId}`, params),
+  clusterBindLogicIdcEnv: (cId: number, lId: number) => request.post(`api/v1/my/cluster/${cId}/logicidcenv/${lId}`),
+  clusterDeleteLogicIdcEnv: (cId: number, lId: number) => request.delete(`api/v1/my/cluster/${cId}/logicidcenv/${lId}`),
 
   queryLogicIdcEnv: () => request.get<LogicIdcEnv[]>(`${API}/logicidcenv`),
 
