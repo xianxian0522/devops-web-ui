@@ -29,23 +29,36 @@
       </div>
     </template>
   </a-table>
+
+  <a-modal v-model:visible="visible" title="添加" @ok="addCluster">
+    <a-form :model="modalForm" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="集群名" >
+        <a-input v-model:value="modalForm.Name" placeholder="集群名" />
+      </a-form-item>
+      <a-form-item label="描述">
+        <a-input v-model:value="modalForm.Comment" placeholder="描述" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </div>
 </template>
 
 <script lang="ts">
-import { reactive, watch } from "vue";
+import { reactive, toRefs, UnwrapRef, watch } from "vue";
 import { TableState } from "ant-design-vue/es/table/interface";
 import { EditOutlined } from '@ant-design/icons-vue'
 import appClusterRepositories from "@/composable/appClusterRepositories";
 import { Cluster } from "@/utils/response";
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
 import * as _ from "lodash";
+import devopsRepository from "@/api/devopsRepository";
+import { message } from "ant-design-vue";
 
 export default {
   name: "AppSetCluster",
   components: { EditOutlined, CommonBreadcrumb },
   setup() {
-    const { appId, clusterList, data } = appClusterRepositories()
+    const { appId, clusterList, data, getCluster } = appClusterRepositories()
     const formState = reactive({
       Name: '',
     })
@@ -59,15 +72,36 @@ export default {
       current: 1,
       pageSize: 10,
     })
+    const modalState = reactive({
+      visible: false,
+    })
+    const modalForm = reactive({
+      Name: '',
+      Comment: '',
+    })
+
     const paginationChange = (page: TableState['pagination']) => {
       pagination.current = page?.current as number
       pagination.pageSize = page?.pageSize as number
     }
     const showCreateDialog = () => {
-      console.log('===')
+      modalState.visible = true
+      modalForm.Name = ''
+      modalForm.Comment = ''
     }
     const showEditDialog = (cluster: Cluster) => {
       console.log(cluster)
+    }
+    const addCluster = async () => {
+      const value = {...modalForm}
+      try {
+        await devopsRepository.updateAppCluster(appId.value, value)
+        modalState.visible = false
+        message.success('添加成功')
+        await getCluster()
+      } catch (e) {
+        console.error(e)
+      }
     }
     const debounceName = (value: string) => {
       data.value = clusterList.value.filter((cluster: Cluster) => cluster.Name?.indexOf(value) !== -1)
@@ -79,9 +113,12 @@ export default {
       formState,
       columns,
       pagination,
+      modalForm,
+      ...toRefs(modalState),
       paginationChange,
       showCreateDialog,
       showEditDialog,
+      addCluster,
     }
   }
 };

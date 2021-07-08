@@ -49,6 +49,7 @@ export default {
   queryClusterByAppId: (appId: number) => request.get<Cluster[]>(`${ApiApp}/${appId}/cluster`),
   updateAppMember: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/member`, params),
   updateAppInfo: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}`, params),
+  updateAppCluster: (appId: number, params: any) => request.post(`${ApiApp}/${appId}/cluster`, params),
   transferOwnerByAppId: (appId: number, params: any) => request.patch(`${ApiApp}/${appId}/transfer`, params),
 
 }
