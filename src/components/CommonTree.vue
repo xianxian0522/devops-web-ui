@@ -3,15 +3,15 @@
   <ul v-for="node in nodes" :key="node.key">
     <li v-if="node.children">
       <span>
-        <CaretDownOutlined class="svg" v-if="node.expanded" />
-        <CaretRightOutlined class="svg" v-else />
+        <CaretDownOutlined @click="isExpandedChildren(node)" class="svg" v-if="node.expanded" />
+        <CaretRightOutlined @click="isExpandedChildren(node)" class="svg" v-else />
       </span>
       <a-checkbox v-if="node.checked" v-model:checked="node.selected"></a-checkbox>
       <span>{{ node.title }}</span>
       <CommonTree v-if="node.expanded" :nodes-tree="node.children" />
     </li>
     <li v-else>
-      <a-checkbox v-model:checked="node.selected">{{ node.title }}</a-checkbox>
+      <a-checkbox @click="clusterBindLogicIdcEnv(node)" v-model:checked="node.selected">{{ node.title }}</a-checkbox>
     </li>
   </ul>
 </div>
@@ -35,8 +35,17 @@ export default {
     const nodes = ref<NodeTree[]>(props.nodesTree)
     console.log(nodes)
 
+    const isExpandedChildren = (node: NodeTree) => {
+      node.expanded = !node.expanded
+    }
+    const clusterBindLogicIdcEnv = (node: NodeTree) => {
+      console.log(node)
+    }
+
     return {
       nodes,
+      clusterBindLogicIdcEnv,
+      isExpandedChildren,
     }
   }
 };
