@@ -23,7 +23,7 @@
     <a-collapse-panel key="1" header="高级设置" :style="customStyle">
       <div class="set-information">
         <div class="common-margin">实例模板</div>
-        <CommonForm />
+        <CommonForm :instance="clusterInfo?.InstanceTemplate" @updateInstance="updateInstance"/>
 <!--        <a-form :model="transferForm" layout="inline">-->
 <!--          <a-form-item label="转交给" >-->
 <!--            <a-select-->
@@ -51,6 +51,11 @@ import { CaretRightOutlined } from '@ant-design/icons-vue'
 import appClusterInfoRepositories from "@/composable/appClusterInfoRepositories";
 import devopsRepository from "@/api/devopsRepository";
 import { message } from "ant-design-vue";
+import { InstanceTemplate } from "@/utils/response";
+
+export interface updateInstance {
+  InstanceTemplate: InstanceTemplate
+}
 
 export default {
   name: "AppSetClusterEdit",
@@ -77,6 +82,14 @@ export default {
         console.error(e)
       }
     }
+    const updateInstance = async (value: updateInstance) => {
+      try {
+        await devopsRepository.updateClusterByCluId(clusterId.value, value)
+        message.success('修改成功')
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
     watch(clusterInfo, value => {
       formState.Comment = value?.Comment
@@ -86,7 +99,9 @@ export default {
     return {
       formState,
       customStyle,
+      clusterInfo,
       updateCluster,
+      updateInstance,
     }
   }
 };

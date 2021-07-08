@@ -26,10 +26,14 @@ export interface BindInfos {
   Port?: number;
   Protocol?: string;
 }
+export interface EnvVar {
+  Name: string;
+  Value: string;
+}
 export interface InstanceTemplate {
   BindInfos?: BindInfos[];
   DataDir?: string;
-  EnvVars?: {[key: string]: string}[]
+  EnvVars?: EnvVar[];
   LogDir?: string;
   MetricEndpoint?: string;
   User?: string;
@@ -110,7 +114,7 @@ export interface Instance {
   BindInfos?: BindInfos[];
   Comment?: string;
   CreatedAt?: string;
-  EnvVars?: {[key: string]: string}[];
+  EnvVars?: EnvVar[];
   ID: number;
   Name?: string;
   ReplicaSet?: ReplicaSet;
@@ -131,7 +135,7 @@ export interface Cluster {
 export interface Env {
   CreatedAt?: string;
   DisplayName?: string;
-  EnvVars?: {[key: string]: string}[];
+  EnvVars?: EnvVar[];
   ID: number;
   Name?: string;
   UpdatedAt?: string;
@@ -139,7 +143,7 @@ export interface Env {
 export interface LogicIdc {
   CreatedAt?: string;
   DisplayName?: string;
-  EnvVars?: {[key: string]: string}[];
+  EnvVars?: EnvVar[];
   ID?: number;
   Name?: string;
   UpdatedAt?: string;
@@ -147,7 +151,7 @@ export interface LogicIdc {
 export interface LogicIdcEnv {
   CreatedAt?: string;
   Env?: Env;
-  EnvVars?: {[key: string]: string}[];
+  EnvVars?: EnvVar[];
   ID: number;
   LogicIdc?: LogicIdc;
   UpdatedAt?: string;

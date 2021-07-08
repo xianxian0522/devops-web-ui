@@ -1,6 +1,6 @@
 <template>
 <div class="common-content">
-  <a-form :model="formState" >
+  <a-form :model="formState">
     <a-form-item class="common-form">
       <label class="common-form-label">绑定端口信息: <PlusCircleOutlined @click="addInfo" class="common-icon" /></label>
       <div v-for="(bindInfo, index) in formState.BindInfos" :key="'BindInfos' + index">
@@ -75,19 +75,23 @@
       </a-select>
     </a-form-item>
   </a-form>
-  <a-button type="primary" style="margin: 20px 0">修改</a-button>
+  <a-button @click="updateInstance" type="primary" style="margin: 20px 0">修改</a-button>
 </div>
 </template>
 
 <script lang="ts">
-import { reactive, UnwrapRef } from "vue";
+import { onMounted, reactive, UnwrapRef } from "vue";
 import { InstanceTemplate } from "@/utils/response";
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: "CommonForm",
   components: { PlusCircleOutlined, MinusCircleOutlined },
-  setup() {
+  emits: ['updateInstance'],
+  props: {
+    instance: Object,
+  },
+  setup(props: any, content: any) {
     const formState: UnwrapRef<InstanceTemplate> = reactive({
       BindInfos: [
         {
@@ -114,17 +118,55 @@ export default {
     })
 
     const addInfo = () => {
-      console.log('----')
+      formState.BindInfos?.push({
+        Ip: '',
+        Name: '',
+        Port: 0,
+        Protocol: '',
+      })
     }
     const addEnv = () => {
-      console.log('====')
+      formState.EnvVars?.push({
+        Name: '',
+        Value: '',
+      })
     }
     const removeInfo = (index: number) => {
-      console.log(index, 'info')
+      if (formState.BindInfos!.length > 1) {
+        formState.BindInfos!.splice(index, 1)
+      }
     }
     const removeEnv = (index: number) => {
-      console.log(index, 'env')
+      if (formState.EnvVars!.length > 1) {
+        formState.EnvVars!.splice(index, 1)
+      }
     }
+    const updateInstance = () => {
+      const value = {
+        InstanceTemplate: formState
+      }
+      content.emit('updateInstance', value)
+    }
+    const getFormState = (value: InstanceTemplate) => {
+      if (value.BindInfos && value.BindInfos.length > 0) {
+        formState.BindInfos = value.BindInfos
+      }
+      if (value.EnvVars && value.EnvVars.length > 0) {
+        formState.EnvVars = value.EnvVars
+      }
+      formState.Comment = value?.Comment
+      formState.DataDir = value?.DataDir
+      formState.LogDir = value?.LogDir
+      formState.MetricEndpoint = value?.MetricEndpoint
+      formState.Name = value?.Name
+      formState.State = value?.State
+      formState.User = value?.User
+      formState.WorkDir = value?.WorkDir
+    }
+
+    onMounted(() => {
+      getFormState(props.instance)
+    })
 
     return {
       formState,
@@ -132,6 +174,7 @@ export default {
       addEnv,
       removeInfo,
       removeEnv,
+      updateInstance,
     }
   }
 };
@@ -150,6 +193,9 @@ export default {
   border-radius: 4px;
   position: relative;
   flex: 1;
+  margin-left: 120px;
+  margin-bottom: 10px;
+  max-width: fit-content;
   .delete-icon {
     cursor: pointer;
     position: absolute;
@@ -173,7 +219,7 @@ export default {
   margin-right: 10px;
   cursor: pointer;
 }
-.common-form /deep/ .ant-form-item-control-input-content {
-  display: flex;
-}
+//.common-form /deep/ .ant-form-item-control-input-content {
+//  display: flex;
+//}
 </style>
