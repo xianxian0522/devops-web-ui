@@ -24,19 +24,8 @@
       <div class="set-information">
         <div class="common-margin">实例模板</div>
         <CommonForm :instance="clusterInfo?.InstanceTemplate" @updateInstance="updateInstance"/>
-<!--        <a-form :model="transferForm" layout="inline">-->
-<!--          <a-form-item label="转交给" >-->
-<!--            <a-select-->
-<!--              v-model:value="transferForm.OwnerID"-->
-<!--              show-search-->
-<!--              style="min-width: 200px;"-->
-<!--              placeholder="Select a User"-->
-<!--            >-->
-<!--              <a-select-option v-for="option in appMembers" :key="option.ID" :value="option.UserID">{{ option.Username }}</a-select-option>-->
-<!--            </a-select>-->
-<!--          </a-form-item>-->
-<!--        </a-form>-->
-<!--        <a-button @click="onSubmitTransfer">确定</a-button>-->
+        <div class="common-margin">绑定机房环境</div>
+        <CommonTree />
       </div>
     </a-collapse-panel>
   </a-collapse>
@@ -46,6 +35,7 @@
 <script lang="ts">
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
 import CommonForm from "@/components/CommonForm.vue";
+import CommonTree from "@/components/CommonTree.vue";
 import { reactive, watch } from "vue";
 import { CaretRightOutlined } from '@ant-design/icons-vue'
 import appClusterInfoRepositories from "@/composable/appClusterInfoRepositories";
@@ -62,6 +52,7 @@ export default {
   components: {
     CommonBreadcrumb,
     CommonForm,
+    CommonTree,
     CaretRightOutlined,
   },
   setup() {

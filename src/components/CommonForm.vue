@@ -75,7 +75,7 @@
       </a-select>
     </a-form-item>
   </a-form>
-  <a-button @click="updateInstance" type="primary" style="margin: 20px 0">修改</a-button>
+  <a-button @click="updateInstance" type="primary" style="margin: 20px 0 10px 0">修改</a-button>
 </div>
 </template>
 
