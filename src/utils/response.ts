@@ -38,6 +38,8 @@ export interface InstanceTemplate {
   HostInnerIP?: string;
   ID?: number;
   Name?: string;
+  Comment?: string;
+  State?: string;
 }
 export interface AppResponse {
   CreatedAt?: string;
