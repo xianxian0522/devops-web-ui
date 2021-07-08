@@ -22,6 +22,8 @@
     </template>
     <a-collapse-panel key="1" header="高级设置" :style="customStyle">
       <div class="set-information">
+        <div class="common-margin">实例模板</div>
+        <CommonForm />
 <!--        <a-form :model="transferForm" layout="inline">-->
 <!--          <a-form-item label="转交给" >-->
 <!--            <a-select-->
@@ -43,6 +45,7 @@
 
 <script lang="ts">
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
+import CommonForm from "@/components/CommonForm.vue";
 import { reactive, watch } from "vue";
 import { CaretRightOutlined } from '@ant-design/icons-vue'
 import appClusterInfoRepositories from "@/composable/appClusterInfoRepositories";
@@ -53,6 +56,7 @@ export default {
   name: "AppSetClusterEdit",
   components: {
     CommonBreadcrumb,
+    CommonForm,
     CaretRightOutlined,
   },
   setup() {
@@ -89,5 +93,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+.common-margin {
+  margin: 10px 0;
+}
 </style>
