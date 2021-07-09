@@ -25,7 +25,9 @@
         <a-button type="link" >
           <router-link :to="{path: 'set-cluster/edit/' + record.ID}"><EditOutlined /></router-link>
         </a-button>
-        <a-button type="link">实例配置</a-button>
+        <a-button type="link">
+          <router-link :to="{path: 'set-cluster/instance/' + record.ID}">实例配置</router-link>
+        </a-button>
       </div>
     </template>
   </a-table>
