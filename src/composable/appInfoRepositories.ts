@@ -6,6 +6,7 @@ import { AppResponse } from "@/utils/response";
 export default function appInfoRepositories() {
   const route = useRoute()
   const appId = ref(parseInt(route.params.appId as string, 10))
+  const bizId = ref(parseInt(route.params.bizId as string, 10))
   const appInfo = ref<AppResponse>()
 
   const getAppInfo = async () => {
@@ -18,6 +19,7 @@ export default function appInfoRepositories() {
   onMounted(getAppInfo)
 
   return {
+    bizId,
     appId,
     appInfo,
   }

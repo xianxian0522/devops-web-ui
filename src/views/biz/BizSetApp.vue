@@ -14,12 +14,12 @@
     <template #action="{ record }" >
      <div >
        <a-button type="link">
-         <router-link :to="{path: '/app/' + record.ID + '/members'}">
+         <router-link :to="{path: '/' + bizId + '/app/' + record.ID + '/members'}">
            <TeamOutlined />
          </router-link>
        </a-button>
        <a-button type="link">
-         <router-link :to="{path: '/app/' + record.ID + '/index'}">
+         <router-link :to="{path: '/' + bizId + '/app/' + record.ID + '/index'}">
            <EditOutlined />
          </router-link>
        </a-button>
@@ -114,6 +114,7 @@ export default {
       formState,
       columns,
       pagination,
+      bizId,
       paginationChange,
       ...toRefs(state),
     }

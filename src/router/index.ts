@@ -26,7 +26,7 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
-    path: '/app/:appId',
+    path: '/:bizId/app/:appId',
     component: () => import('../components/AppLayout.vue'),
     children: [
       {path: 'index', component: () => import('../views/app/AppComponent.vue')},

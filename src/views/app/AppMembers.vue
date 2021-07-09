@@ -2,7 +2,7 @@
 <div>
   <CommonBreadcrumb >
     <template v-slot:first>
-      <router-link to="">biz</router-link>
+      <router-link :to="{ path: '/biz/app-settings', query: { bizId: bizId } }">biz</router-link>
     </template>
     <template v-slot:second>members</template>
   </CommonBreadcrumb>
@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from "vue-router";
 import { defineAsyncComponent, ref } from "vue";
 import appMemberRepositories from "@/composable/appMemberRepositories";
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
@@ -23,15 +22,14 @@ export default {
     CommonMembers: defineAsyncComponent(() => import('@/components/CommonMembers.vue'))
   },
   setup() {
-    const route = useRoute()
-    const appId = ref(parseInt(route.params.appId as string, 10))
-    const { getMembers, appMembers } = appMemberRepositories()
+    const { getMembers, appMembers, appId, bizId} = appMemberRepositories()
 
     const updateMembers = () => {
       getMembers()
     }
 
     return {
+      bizId,
       appId,
       appMembers,
       updateMembers,

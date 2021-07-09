@@ -2,7 +2,7 @@
 <div>
   <CommonBreadcrumb >
     <template v-slot:first>
-      <router-link to="">biz</router-link>
+      <router-link  :to="{ path: '/biz/app-settings', query: { bizId: bizId } }">biz</router-link>
     </template>
     <template v-slot:second>app</template>
   </CommonBreadcrumb>
@@ -26,10 +26,11 @@ export default {
   name: "AppComponent",
   components: { CommonBreadcrumb },
   setup() {
-    const { appInfo } = appInfoRepositories()
+    const { appInfo, bizId } = appInfoRepositories()
 
     return {
       appInfo,
+      bizId,
     }
   }
 };

@@ -7,6 +7,7 @@ export default function appMemberRepositories() {
   const appMembers = ref<Members[]>([])
   const route = useRoute()
   const appId = ref(parseInt(route.params.appId as string, 10))
+  const bizId = ref(parseInt(route.params.bizId as string, 10))
   const getMembers = async () => {
     try {
       appMembers.value = await devopsRepository.queryMembersByAppId(appId.value)
@@ -17,6 +18,8 @@ export default function appMemberRepositories() {
   onMounted(getMembers)
 
   return {
+    bizId,
+    appId,
     appMembers,
     getMembers,
   }

@@ -18,7 +18,7 @@
               <a-menu-item :key="item.path">
                 <span>
                   <icon-font :type="item.icon" />
-                  <router-link :to="{path: '/app/' + appId + '/' + item.path, }">{{ item.name }}</router-link>
+                  <router-link :to="{path: '/' + bizId + '/app/' + appId + '/' + item.path, }">{{ item.name }}</router-link>
                 </span>
               </a-menu-item>
             </template>
@@ -31,7 +31,7 @@
                 <a-menu-item v-for="t in item.children" :key="t.path">
                   <span>
                   <icon-font :type="t.icon" />
-                  <router-link :to="{path: '/app/' + appId + '/' + t.path, }" >{{ t.name }}</router-link>
+                  <router-link :to="{path: '/' + bizId + '/app/' + appId + '/' + t.path, }" >{{ t.name }}</router-link>
                   </span>
                 </a-menu-item>
               </a-sub-menu>
@@ -64,10 +64,10 @@ export default {
   setup() {
     const route = useRoute()
     const url = route.path.split('/')
-    const { appInfo, appId } = appInfoRepositories()
+    const { appInfo, appId, bizId } = appInfoRepositories()
     const state = reactive({
       openKeys: ['setup'],
-      selectedKeysMenu: [url[3]],
+      selectedKeysMenu: [url[4]],
     })
     const bar = ref<BarItem[]>([
       {id: 1, icon: 'icon-app', path: 'index', name: '应用总览'},
@@ -83,12 +83,13 @@ export default {
 
     watch(() => route.path, value => {
       const url = value.split('/')
-      state.selectedKeysMenu = [url[3]]
+      state.selectedKeysMenu = [url[4]]
     })
 
     return {
       bar,
       appId,
+      bizId,
       appInfo,
       ...toRefs(state),
     }
