@@ -69,7 +69,6 @@ export default {
       openKeys: ['setup'],
       selectedKeysMenu: [url[4]],
     })
-    console.log(url)
     const bar = ref<BarItem[]>([
       {id: 1, icon: 'icon-app', path: 'index', name: '应用总览'},
       {id: 2, icon: 'icon-member', path: 'members', name: '应用成员'},
