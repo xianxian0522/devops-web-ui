@@ -53,11 +53,16 @@ export interface AppResponse {
   InstanceTemplate?: InstanceTemplate;
   Level?: string;
   Name?: string;
-  ReleaseInfo?: {[key: string]: string};
+  ReleaseInfo?: ReleaseInfo;
   UpdatedAt?: string;
   AppMembers?: Members[];
   Hosts?: Hosts[];
   Owner?: User;
+}
+export interface ReleaseInfo {
+  PackageName: string;
+  ProjectName: string;
+  RepoName: string;
 }
 export interface Members {
   CreatedAt?: string;
@@ -173,5 +178,9 @@ export interface NodeTree {
   selected?: boolean;
   expanded?: boolean;
   children?: NodeTree[];
+}
+export interface UpdateAppInfo {
+  InstanceTemplate: InstanceTemplate;
+  ReleaseInfo?: ReleaseInfo;
 }
 

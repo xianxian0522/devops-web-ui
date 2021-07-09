@@ -21,7 +21,7 @@
       <caret-right-outlined :rotate="isActive ? 90 : 0" />
     </template>
     <a-collapse-panel key="1" header="高级设置" :style="customStyle">
-      <div class="set-information">
+      <div >
         <div class="common-margin">实例模板</div>
         <CommonForm :instance="clusterInfo?.InstanceTemplate" @updateInstance="updateInstance"/>
         <div class="common-margin">绑定机房环境</div>
@@ -41,11 +41,7 @@ import { CaretRightOutlined } from '@ant-design/icons-vue'
 import appClusterInfoRepositories from "@/composable/appClusterInfoRepositories";
 import devopsRepository from "@/api/devopsRepository";
 import { message } from "ant-design-vue";
-import { InstanceTemplate } from "@/utils/response";
-
-export interface updateInstance {
-  InstanceTemplate: InstanceTemplate
-}
+import { UpdateAppInfo } from "@/utils/response";
 
 export default {
   name: "AppSetClusterEdit",
@@ -73,7 +69,7 @@ export default {
         console.error(e)
       }
     }
-    const updateInstance = async (value: updateInstance) => {
+    const updateInstance = async (value: UpdateAppInfo) => {
       try {
         await devopsRepository.updateClusterByCluId(clusterId.value, value)
         message.success('修改成功')

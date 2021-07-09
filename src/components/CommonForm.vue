@@ -1,5 +1,5 @@
 <template>
-<div class="common-content">
+<div class="common-contents">
   <a-form :model="formState">
     <a-form-item class="common-form">
       <label class="common-form-label">绑定端口信息: <PlusCircleOutlined @click="addInfo" class="common-icon" /></label>
@@ -75,13 +75,27 @@
       </a-select>
     </a-form-item>
   </a-form>
+  <div v-if="isRelease">
+    <div style="margin-top: 20px;">发布包信息</div>
+    <a-form :model="formRelease" layout="inline" >
+      <a-form-item label="仓库名">
+        <a-input v-model:value="formRelease.RepoName" placeholder="仓库名" />
+      </a-form-item>
+      <a-form-item label="项目名">
+        <a-input v-model:value="formRelease.ProjectName" placeholder="项目名" />
+      </a-form-item>
+      <a-form-item label="包名">
+        <a-input v-model:value="formRelease.PackageName" placeholder="包名" />
+      </a-form-item>
+    </a-form>
+  </div>
   <a-button @click="updateInstance" type="primary" style="margin: 20px 0 10px 0">修改</a-button>
 </div>
 </template>
 
 <script lang="ts">
 import { onMounted, reactive, UnwrapRef } from "vue";
-import { InstanceTemplate } from "@/utils/response";
+import { InstanceTemplate, ReleaseInfo, UpdateAppInfo } from "@/utils/response";
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
 
 export default {
@@ -90,6 +104,8 @@ export default {
   emits: ['updateInstance'],
   props: {
     instance: Object,
+    release: Object,
+    isRelease: Boolean,
   },
   setup(props: any, content: any) {
     const formState: UnwrapRef<InstanceTemplate> = reactive({
@@ -115,6 +131,11 @@ export default {
       State: undefined,
       User: '',
       WorkDir: '',
+    })
+    const formRelease: UnwrapRef<ReleaseInfo> = reactive({
+      PackageName: '',
+      ProjectName: '',
+      RepoName: '',
     })
 
     const addInfo = () => {
@@ -142,8 +163,11 @@ export default {
       }
     }
     const updateInstance = () => {
-      const value = {
+      const value: UpdateAppInfo = {
         InstanceTemplate: formState
+      }
+      if (props.isRelease) {
+        value.ReleaseInfo = {...formRelease}
       }
       content.emit('updateInstance', value)
     }
@@ -163,13 +187,22 @@ export default {
       formState.User = value?.User
       formState.WorkDir = value?.WorkDir
     }
+    const getFormRelease = (value: ReleaseInfo) => {
+      formRelease.PackageName = value.PackageName
+      formRelease.RepoName = value.RepoName
+      formRelease.ProjectName = value.ProjectName
+    }
 
     onMounted(() => {
       getFormState(props.instance)
+      if (props.isRelease) {
+        getFormRelease(props.release)
+      }
     })
 
     return {
       formState,
+      formRelease,
       addInfo,
       addEnv,
       removeInfo,
@@ -203,7 +236,7 @@ export default {
     top: 8px;
   }
 }
-.common-content {
+.common-contents {
   .ant-form-inline .ant-form-item {
     margin-top: 10px;
     margin-bottom: 0;

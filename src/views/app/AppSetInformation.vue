@@ -23,7 +23,9 @@
       <caret-right-outlined :rotate="isActive ? 90 : 0" />
     </template>
     <a-collapse-panel key="1" header="高级设置" :style="customStyle">
-      <div class="set-information">
+      <div class="common-margins">实例模板</div>
+      <CommonForm :instance="appInfo?.InstanceTemplate" :is-release="true" :release="appInfo?.ReleaseInfo" @updateInstance="updateInstance"/>
+      <div class="set-information common-margins">
         <a-form :model="transferForm" layout="inline">
           <a-form-item label="转交给" >
             <a-select
@@ -45,18 +47,21 @@
 
 <script lang="ts">
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
+import CommonForm from "@/components/CommonForm.vue";
 import { reactive, watch } from "vue";
 import appInfoRepositories from "@/composable/appInfoRepositories";
 import { CaretRightOutlined } from '@ant-design/icons-vue';
 import devopsRepository from "@/api/devopsRepository";
 import { message } from "ant-design-vue";
 import appMemberRepositories from "@/composable/appMemberRepositories";
+import { UpdateAppInfo } from "@/utils/response";
 
 export default {
   name: "AppSetInformation",
   components: {
     CommonBreadcrumb,
     CaretRightOutlined,
+    CommonForm,
   },
   setup() {
     const customStyle =
@@ -90,6 +95,14 @@ export default {
         console.error(e)
       }
     }
+    const updateInstance = async (value: UpdateAppInfo) => {
+      try {
+        await devopsRepository.updateAppInfo(appId.value, value)
+        message.success('修改成功')
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
     watch(appInfo, (value) => {
       formState.Name = value?.Name
@@ -101,10 +114,12 @@ export default {
     return {
       customStyle,
       formState,
+      appInfo,
       appMembers,
       transferForm,
       updateApp,
       onSubmitTransfer,
+      updateInstance,
     }
   }
 };
@@ -112,4 +127,7 @@ export default {
 
 <style scoped lang="less">
 @import "../../components/index.less";
+.common-margins {
+  margin: 10px 0;
+}
 </style>

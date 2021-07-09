@@ -37,14 +37,13 @@ export default {
   },
   setup(props: any) {
     const nodes = ref<NodeTree[]>(props.nodesTree)
-    console.log(nodes)
 
     const isExpandedChildren = (node: NodeTree) => {
       node.expanded = !node.expanded
     }
     const clusterBindLogicIdcEnv = async (selected: boolean, id: number ) => {
       if (props.isBind) {
-        // console.log(selected)
+        // console.log(selected, '相反???')
         selected ? await devopsRepository.clusterDeleteLogicIdcEnv(props.clusterId, id)
           : await devopsRepository.clusterBindLogicIdcEnv(props.clusterId, id)
         message.success( selected ? '集群成功解除绑定到逻辑机房' : '集群成功绑定逻辑机房')
