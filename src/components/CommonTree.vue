@@ -8,10 +8,10 @@
       </span>
       <a-checkbox v-if="node.checked" v-model:checked="node.selected"></a-checkbox>
       <span>{{ node.title }}</span>
-      <CommonTree v-if="node.expanded" :nodes-tree="node.children" />
+      <CommonTree v-if="node.expanded" :nodes-tree="node.children" :is-bind="isBind" :cluster-id="clusterId"/>
     </li>
     <li v-else>
-      <a-checkbox @click="clusterBindLogicIdcEnv(node)" v-model:checked="node.selected">{{ node.title }}</a-checkbox>
+      <a-checkbox @click="clusterBindLogicIdcEnv(node.selected, node.id)" v-model:checked="node.selected">{{ node.title }}</a-checkbox>
     </li>
   </ul>
 </div>
@@ -21,6 +21,8 @@
 import { ref } from "vue";
 import { NodeTree } from "@/utils/response";
 import {CaretDownOutlined, CaretRightOutlined } from '@ant-design/icons-vue'
+import devopsRepository from "@/api/devopsRepository";
+import { message } from "ant-design-vue";
 
 export default {
   name: "CommonTree",
@@ -30,6 +32,8 @@ export default {
   },
   props: {
     nodesTree: Array,
+    isBind: Boolean,
+    clusterId: Number,
   },
   setup(props: any) {
     const nodes = ref<NodeTree[]>(props.nodesTree)
@@ -38,8 +42,13 @@ export default {
     const isExpandedChildren = (node: NodeTree) => {
       node.expanded = !node.expanded
     }
-    const clusterBindLogicIdcEnv = (node: NodeTree) => {
-      console.log(node)
+    const clusterBindLogicIdcEnv = async (selected: boolean, id: number ) => {
+      if (props.isBind) {
+        // console.log(selected)
+        selected ? await devopsRepository.clusterDeleteLogicIdcEnv(props.clusterId, id)
+          : await devopsRepository.clusterBindLogicIdcEnv(props.clusterId, id)
+        message.success( selected ? '集群成功解除绑定到逻辑机房' : '集群成功绑定逻辑机房')
+      }
     }
 
     return {

@@ -25,7 +25,7 @@
         <div class="common-margin">实例模板</div>
         <CommonForm :instance="clusterInfo?.InstanceTemplate" @updateInstance="updateInstance"/>
         <div class="common-margin">绑定机房环境</div>
-        <CommonTree :nodesTree="nodesTree" />
+        <CommonTree :nodesTree="nodesTree" :is-bind="true" :cluster-id="clusterId" />
       </div>
     </a-collapse-panel>
   </a-collapse>
@@ -91,6 +91,7 @@ export default {
       formState,
       customStyle,
       clusterInfo,
+      clusterId,
       nodesTree,
       updateCluster,
       updateInstance,
