@@ -9,7 +9,7 @@
 
   <div class="biz-members-content-header cluster-instance">
     <div>
-      <a-button @click="showCreateDialog">添加</a-button>
+      <a-button :disabled="!rId" @click="showCreateDialog">添加</a-button>
     </div>
     <a-form :model="formState" layout="inline">
       <a-form-item label="名字" style="margin-right: 0">
@@ -17,7 +17,7 @@
       </a-form-item>
     </a-form>
   </div>
-  <a-table :columns="columns" :data-source="data" :row-key="(record) => record.ID"
+  <a-table :columns="columns" :data-source="instanceListFilter" :row-key="(record) => record.ID"
            @change="paginationChange" :scroll="{ x: 2000 }"
            :pagination="pagination">
     <template #name="{ text }">
@@ -25,24 +25,39 @@
     </template>
     <template #action="{ record }" >
       <div >
-        <a-button type="link" >
-          <EditOutlined />{{ record.ID }}
+        <a-button type="link" @click="showEditDialog(record)">
+          <EditOutlined />
         </a-button>
       </div>
     </template>
   </a-table>
+
+  <a-modal v-model:visible="visible" :title="modalTitle" :width="'80vw'" :footer="null">
+    <CommonForm :instance="instanceInfo" :is-host="isHost" @updateInstance="updateInstance"  />
+  </a-modal>
 </div>
 </template>
 
 <script lang="ts">
 import CommonBreadcrumb from "@/components/CommonBreadcrumb.vue";
 import CommonTree from "@/components/CommonTree.vue";
+import CommonForm from "@/components/CommonForm.vue";
 import rsRepositories from "@/composable/rsRepositories";
-import { Instance, NodeTree } from "@/utils/response";
+import { Instance, NodeTree, UpdateAppInfo } from "@/utils/response";
 import devopsRepository from "@/api/devopsRepository";
-import { reactive, ref } from "vue";
+import { reactive, ref, toRefs, UnwrapRef, watch } from "vue";
 import { TableState } from "ant-design-vue/es/table/interface";
 import { EditOutlined } from '@ant-design/icons-vue'
+import { message } from "ant-design-vue";
+import * as _ from "lodash";
+
+export interface ModalInstance {
+  visible: boolean;
+  modalTitle: string;
+  mode: string;
+  instanceInfo: Instance;
+  isHost: boolean;
+}
 
 export default {
   name: "AppClusterInstance",
@@ -50,6 +65,7 @@ export default {
     CommonBreadcrumb,
     CommonTree,
     EditOutlined,
+    CommonForm,
   },
   setup() {
     const { nodesTree } = rsRepositories()
@@ -73,16 +89,30 @@ export default {
     const formState = reactive({
       Name: '',
     })
-    const data = ref<Instance[]>([])
+    const instanceListFilter = ref<Instance[]>([])
     const instanceList = ref<Instance[]>([])
+    const rId = ref(0)
+    const modalState: UnwrapRef<ModalInstance> = reactive({
+      visible: false,
+      modalTitle: '',
+      mode: '',
+      instanceInfo: {ID: 0},
+      isHost: false,
+    })
 
     const instanceSelect = (rsId: number) => {
-      getRsInstance(rsId)
+      rId.value = 0
       const arr = nodesTree.value.map(k => k.children)
       const data = flattenDeep(arr)
       data.forEach((k: NodeTree) => {
         if (k.id !== rsId) {
           k.selected = false
+        } else {
+          instanceListFilter.value = []
+          if (!k.selected) {
+            rId.value = rsId
+            getRsInstance()
+          }
         }
       })
     }
@@ -90,10 +120,10 @@ export default {
       return arr.reduce((acc: any, val: any) => Array.isArray(val) ?
         acc.concat(flattenDeep(val)) : acc.concat(val), [])
     }
-    const getRsInstance = async (rsId: number) => {
+    const getRsInstance = async () => {
       try {
-        const data = await devopsRepository.queryRsInstanceByRsId(rsId)
-        console.log(rsId, data)
+        instanceList.value = await devopsRepository.queryRsInstanceByRsId(rId.value)
+        instanceListFilter.value = instanceList.value
       } catch (e) {
         console.error(e)
       }
@@ -103,18 +133,50 @@ export default {
       pagination.pageSize = page?.pageSize as number
     }
     const showCreateDialog = () => {
-      console.log(';;;')
+      modalState.visible = true
+      modalState.modalTitle = '新增实例'
+      modalState.mode = 'created'
+      modalState.instanceInfo = {ID: 0}
+      modalState.isHost = true
     }
+    const showEditDialog = (col: Instance) => {
+      modalState.visible = true
+      modalState.modalTitle = '修改实例'
+      modalState.mode = 'edit'
+      modalState.instanceInfo = col
+      modalState.isHost = false
+    }
+    const updateInstance = async (value: UpdateAppInfo) => {
+      try {
+        const params = value.InstanceTemplate
+        const insId = modalState.instanceInfo.ID
+        modalState.mode === 'edit' ? await devopsRepository.updateInstanceByInsId(insId, params)
+          : await devopsRepository.addInstanceByRsId(rId.value, params)
+        modalState.visible = false
+        message.success(modalState.mode === 'edit' ? '修改成功' : '新增成功')
+        await getRsInstance()
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const debounceName = (value: string) => {
+      instanceListFilter.value = instanceList.value.filter((instance: Instance) => instance.Name?.indexOf(value) !== -1)
+    }
+    watch(() => formState.Name, _.debounce(debounceName, 300))
 
     return {
       nodesTree,
       formState,
       columns,
       pagination,
-      data,
+      instanceListFilter,
+      rId,
+      ...toRefs(modalState),
       instanceSelect,
       paginationChange,
       showCreateDialog,
+      showEditDialog,
+      updateInstance,
     }
   }
 };

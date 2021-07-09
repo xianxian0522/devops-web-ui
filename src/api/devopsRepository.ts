@@ -37,6 +37,8 @@ export default {
 
   queryLogicIdcEnv: () => request.get<LogicIdcEnv[]>(`${API}/logicidcenv`),
   queryRsInstanceByRsId: (rsId: number) => request.get<Instance[]>(`${API}/rs/${rsId}/instance`),
+  addInstanceByRsId: (rsId: number, params: any) => request.post(`${API}/rs/${rsId}`, params),
+  updateInstanceByInsId: (insId: number, params: any) => request.patch(`${API}/instnace/${insId}`, params),
 
   deleteBizMember: (mId: number) => request.delete(`${API}/bizmember/${mId}`),
   deleteAppMember: (mId: number) => request.delete(`${API}/appmember/${mId}`),

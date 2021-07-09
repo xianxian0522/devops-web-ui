@@ -74,6 +74,16 @@
         <a-select-option value="maintaining">maintaining</a-select-option>
       </a-select>
     </a-form-item>
+    <a-form-item label="主机" v-if="isHost">
+      <a-select
+        v-model:value="formState.HostID"
+        show-search
+        style="width: 160px;"
+        placeholder="Select a Host"
+      >
+        <a-select-option v-for="host in hostsList" :key="host.ID" :value="host.ID">{{ host.InnerIP }}</a-select-option>
+      </a-select>
+    </a-form-item>
   </a-form>
   <div v-if="isRelease">
     <div style="margin-top: 20px;">发布包信息</div>
@@ -94,9 +104,13 @@
 </template>
 
 <script lang="ts">
-import { onMounted, reactive, UnwrapRef } from "vue";
-import { InstanceTemplate, ReleaseInfo, UpdateAppInfo } from "@/utils/response";
+import { onMounted, reactive, ref, UnwrapRef } from "vue";
+import { Hosts, InstanceTemplate, ReleaseInfo, UpdateAppInfo } from "@/utils/response";
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
+import appHostRepositories from "@/composable/appHostRepositories";
+import devopsRepository from "@/api/devopsRepository";
+import { useRoute } from "vue-router";
+import { message } from "ant-design-vue";
 
 export default {
   name: "CommonForm",
@@ -106,6 +120,7 @@ export default {
     instance: Object,
     release: Object,
     isRelease: Boolean,
+    isHost: Boolean,
   },
   setup(props: any, content: any) {
     const formState: UnwrapRef<InstanceTemplate> = reactive({
@@ -131,12 +146,16 @@ export default {
       State: undefined,
       User: '',
       WorkDir: '',
+      HostID: undefined,
     })
     const formRelease: UnwrapRef<ReleaseInfo> = reactive({
       PackageName: '',
       ProjectName: '',
       RepoName: '',
     })
+    const route = useRoute()
+    const appId = ref(parseInt(route.params.appId as string, 10))
+    const hostsList = ref<Hosts[]>([])
 
     const addInfo = () => {
       formState.BindInfos?.push({
@@ -169,6 +188,11 @@ export default {
       if (props.isRelease) {
         value.ReleaseInfo = {...formRelease}
       }
+      if (props.isHost) {
+        if (!formState.Name || !formState.HostID) {
+          return message.warning('名字或者主机不能为空')
+        }
+      }
       content.emit('updateInstance', value)
     }
     const getFormState = (value: InstanceTemplate) => {
@@ -186,11 +210,15 @@ export default {
       formState.State = value?.State
       formState.User = value?.User
       formState.WorkDir = value?.WorkDir
+      formState.HostID = value?.HostID
     }
     const getFormRelease = (value: ReleaseInfo) => {
       formRelease.PackageName = value.PackageName
       formRelease.RepoName = value.RepoName
       formRelease.ProjectName = value.ProjectName
+    }
+    const getHosts = async () => {
+      hostsList.value = await devopsRepository.queryHostsByAppId(appId.value)
     }
 
     onMounted(() => {
@@ -198,11 +226,15 @@ export default {
       if (props.isRelease) {
         getFormRelease(props.release)
       }
+      if (props.isHost) {
+        getHosts()
+      }
     })
 
     return {
       formState,
       formRelease,
+      hostsList,
       addInfo,
       addEnv,
       removeInfo,
