@@ -36,6 +36,7 @@ export default {
   clusterDeleteLogicIdcEnv: (cId: number, lId: number) => request.delete(`api/v1/my/cluster/${cId}/logicidcenv/${lId}`),
 
   queryLogicIdcEnv: () => request.get<LogicIdcEnv[]>(`${API}/logicidcenv`),
+  queryRsInstanceByRsId: (rsId: number) => request.get<Instance[]>(`${API}/rs/${rsId}/instance`),
 
   deleteBizMember: (mId: number) => request.delete(`${API}/bizmember/${mId}`),
   deleteAppMember: (mId: number) => request.delete(`${API}/appmember/${mId}`),

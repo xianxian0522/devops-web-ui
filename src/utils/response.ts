@@ -126,6 +126,7 @@ export interface Instance {
   State?: string;
   UpdatedAt?: string;
   User?: string;
+  Host?: Hosts;
 }
 export interface Cluster {
   App?: AppResponse;

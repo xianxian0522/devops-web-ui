@@ -8,7 +8,7 @@
       </span>
       <a-checkbox v-if="node.checked" v-model:checked="node.selected"></a-checkbox>
       <span>{{ node.title }}</span>
-      <CommonTree v-if="node.expanded" :nodes-tree="node.children" :is-bind="isBind" :cluster-id="clusterId"/>
+      <CommonTree v-if="node.expanded" @rsInstanceSelect="instanceSelect($event)" :nodes-tree="node.children" :is-bind="isBind" :cluster-id="clusterId"/>
     </li>
     <li v-else>
       <a-checkbox @click="clusterBindLogicIdcEnv(node.selected, node.id)" v-model:checked="node.selected">{{ node.title }}</a-checkbox>
@@ -35,7 +35,8 @@ export default {
     isBind: Boolean,
     clusterId: Number,
   },
-  setup(props: any) {
+  emits: ['rsInstanceSelect'],
+  setup(props: any, content: any) {
     const nodes = ref<NodeTree[]>(props.nodesTree)
 
     const isExpandedChildren = (node: NodeTree) => {
@@ -47,13 +48,19 @@ export default {
         selected ? await devopsRepository.clusterDeleteLogicIdcEnv(props.clusterId, id)
           : await devopsRepository.clusterBindLogicIdcEnv(props.clusterId, id)
         message.success( selected ? '集群成功解除绑定到逻辑机房' : '集群成功绑定逻辑机房')
+      } else {
+        instanceSelect(id)
       }
+    }
+    const instanceSelect = (id: number) => {
+      content.emit('rsInstanceSelect', id)
     }
 
     return {
       nodes,
       clusterBindLogicIdcEnv,
       isExpandedChildren,
+      instanceSelect,
     }
   }
 };

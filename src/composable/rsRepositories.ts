@@ -24,7 +24,6 @@ export default function rsRepositories() {
           obj[item.logicIdcId] = true
         }
       })
-      console.log(logic, result)
       result.forEach((logicIdc: any, index: number) => {
         nodesTree.value.push({
           title: logicIdc.name,
