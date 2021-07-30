@@ -1,8 +1,8 @@
 <template>
   <a-layout class="layout">
-    <a-layout-header class="header">
+<!--    <a-layout-header class="header">-->
       <CommonLayoutHeader />
-    </a-layout-header>
+<!--    </a-layout-header>-->
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
         <div class="select-menu-contain">{{ appInfo?.Name }}</div>

@@ -6,6 +6,8 @@ import {
   Button, Breadcrumb, Checkbox,
   ConfigProvider, Dropdown, Form, Input, Layout, Menu, Modal, Popconfirm, Select, Table, Tag
 } from "ant-design-vue";
+import HeaderComponent from 'menu-header-component/dist/menu-header-component.umd.js'
+import 'menu-header-component/dist/menu-header-component.css'
 
 const app = createApp(App)
 app.use(router)
@@ -27,5 +29,7 @@ app.use(Tag)
 app.use(Collapse)
 app.use(Breadcrumb)
 app.use(InputNumber)
+
+app.use(HeaderComponent)
 
 app.mount("#app");

@@ -1,38 +1,39 @@
 <template>
-  <div class="logo" >
-    <img src="http://www.sumscope.com/favicon.ico" alt="">
-    DEPLOYER
-  </div>
-  <div class="layout-header-menu">
-    <a-menu
-      theme="dark"
-      mode="horizontal"
-      v-model:selectedKeys="selectedKey"
-      :style="{ lineHeight: '58px' }"
-    >
-      <a-menu-item v-for="bar in menuBar" :key="bar.route">
-        <a :href="bar.path">{{ bar.name }}</a>
-      </a-menu-item>
-    </a-menu>
-  </div>
-  <section class="header-right">
-    <a-avatar class="user-avatar">
-      <template #icon><UserOutlined /></template>
-    </a-avatar>
-    <a-dropdown>
-      <a class="ant-dropdown-link" @click.prevent>
-        {{ username }}
-        <DownOutlined />
-      </a>
-      <template #overlay>
-        <a-menu>
-          <a-menu-item>
-            <a @click="logout()">退出</a>
-          </a-menu-item>
-        </a-menu>
-      </template>
-    </a-dropdown>
-  </section>
+<!--  <div class="logo" >-->
+<!--    <img src="http://www.sumscope.com/favicon.ico" alt="">-->
+<!--    DEPLOYER-->
+<!--  </div>-->
+<!--  <div class="layout-header-menu">-->
+<!--    <a-menu-->
+<!--      theme="dark"-->
+<!--      mode="horizontal"-->
+<!--      v-model:selectedKeys="selectedKey"-->
+<!--      :style="{ lineHeight: '58px' }"-->
+<!--    >-->
+<!--      <a-menu-item v-for="bar in menuBar" :key="bar.route">-->
+<!--        <a :href="bar.path">{{ bar.name }}</a>-->
+<!--      </a-menu-item>-->
+<!--    </a-menu>-->
+<!--  </div>-->
+<!--  <section class="header-right">-->
+<!--    <a-avatar class="user-avatar">-->
+<!--      <template #icon><UserOutlined /></template>-->
+<!--    </a-avatar>-->
+<!--    <a-dropdown>-->
+<!--      <a class="ant-dropdown-link" @click.prevent>-->
+<!--        {{ username }}-->
+<!--        <DownOutlined />-->
+<!--      </a>-->
+<!--      <template #overlay>-->
+<!--        <a-menu>-->
+<!--          <a-menu-item>-->
+<!--            <a @click="logout()">退出</a>-->
+<!--          </a-menu-item>-->
+<!--        </a-menu>-->
+<!--      </template>-->
+<!--    </a-dropdown>-->
+<!--  </section>-->
+  <HeaderComponent :logoTitle="'TOPOLOGY'" :menuSelect="'/biz/index'" />
 </template>
 
 <script lang="ts">
@@ -46,42 +47,42 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   name: "CommonLayoutHeader",
   components: {
-    UserOutlined, DownOutlined,
+    // UserOutlined, DownOutlined,
   },
   setup() {
-    const router = useRouter()
-    const state = reactive({
-      selectedKey: ['/biz/index'],
-      username: '用户名',
-    })
-    const menuBar = ref<BarItem[]>([])
-    const logout = () => {
-      localStorage.removeItem('token')
-      router.push('/login')
-    }
-
-    const getBar = async () => {
-      try {
-        menuBar.value = await devopsRepository.queryBar()
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    onMounted(() => {
-      getBar()
-
-      const token = localStorage.getItem('token')
-      if (token) {
-        const userInfo = jwtDecode<{[key:string]: string}>(token)
-        state.username = userInfo?.name || userInfo?.username
-      }
-    })
+    // const router = useRouter()
+    // const state = reactive({
+    //   selectedKey: ['/biz/index'],
+    //   username: '用户名',
+    // })
+    // const menuBar = ref<BarItem[]>([])
+    // const logout = () => {
+    //   localStorage.removeItem('token')
+    //   router.push('/login')
+    // }
+    //
+    // const getBar = async () => {
+    //   try {
+    //     menuBar.value = await devopsRepository.queryBar()
+    //   } catch (e) {
+    //     console.error(e)
+    //   }
+    // }
+    //
+    // onMounted(() => {
+    //   getBar()
+    //
+    //   const token = localStorage.getItem('token')
+    //   if (token) {
+    //     const userInfo = jwtDecode<{[key:string]: string}>(token)
+    //     state.username = userInfo?.name || userInfo?.username
+    //   }
+    // })
 
     return {
-      menuBar,
-      ...toRefs(state),
-      logout,
+      // menuBar,
+      // ...toRefs(state),
+      // logout,
     }
   }
 });
