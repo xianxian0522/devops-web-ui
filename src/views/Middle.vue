@@ -6,6 +6,7 @@
 
 import devopsRepository from "@/api/devopsRepository";
 import router from "@/router";
+import tokenRepositories from "@/composable/tokenRepositories";
 
 export default {
   name: "Middle",
@@ -16,8 +17,7 @@ export default {
     const login = async () => {
       const data = await devopsRepository.login()
       if (data?.token) {
-        localStorage.setItem('token', data.token)
-        router.push('/biz/index').then()
+        tokenRepositories(data?.token)
       }
     }
 
